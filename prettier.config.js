@@ -3,6 +3,8 @@ module.exports = {
   printWidth: 100, // Specify the length of line that the printer will wrap on.
   tabWidth: 2, // Specify the number of spaces per indentation-level.
   singleQuote: true, // Use single quotes instead of double quotes.
+  bracketSpacing: true, // Print spaces between brackets in object literals.
+  arrowParens: 'always', // Include parentheses around a sole arrow function parameter.
   /**
    * Print trailing commas wherever possible.
    * Valid options:
@@ -17,20 +19,5 @@ module.exports = {
    *   - "flow"
    *   - "babylon"
    */
-  parser: 'babylon',
-  /**
-   * Do not print semicolons, except at the beginning of lines which may need them.
-   * Valid options:
-   * - true - add a semicolon at the end of every line
-   * - false - only add semicolons at the beginning of lines that may introduce ASI failures
-   */
-  noSemi: false,
-  /**
-   * Add additional logging from prettierrc (not prettier itself).
-   * Defaults to false
-   * Valid options:
-   * - true - enable additional logging
-   * - false - disable additional logging
-   */
-  rcVerbose: true
+  parser: 'babylon'
 };
