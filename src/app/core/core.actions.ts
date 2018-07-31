@@ -4,7 +4,7 @@ export enum CoreActionTypes {
   LoadCores = '[Core] Load Cores'
 }
 
-export class Core implements Action {
+export class LoadCores implements Action {
   readonly type = CoreActionTypes.LoadCores;
 }
 
