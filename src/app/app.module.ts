@@ -5,13 +5,19 @@ import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../../environments/environment';
+import { environment } from '../environments/environment';
+import { CoreModule } from './core/core.module';
+import { EffectsModule } from '../../node_modules/@ngrx/effects';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
     StoreModule.forRoot(reducers, { metaReducers }),
+    EffectsModule.forRoot([]),
+
+    CoreModule,
+
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
   providers: [],
