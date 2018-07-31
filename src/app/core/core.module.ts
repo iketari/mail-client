@@ -6,6 +6,8 @@ import { StoreModule } from '@ngrx/store';
 import { reducers } from './ngrx/reducers';
 import { EffectsModule } from '../../../node_modules/@ngrx/effects';
 import { CoreEffects } from './ngrx/effects/core.effects';
+import { SharedModule } from '../shared/shared.module';
+import { EmailService } from './services/email.service';
 
 @NgModule({
     declarations: [],
@@ -13,8 +15,12 @@ import { CoreEffects } from './ngrx/effects/core.effects';
         BrowserModule,
         StoreModule.forFeature('core', reducers),
         EffectsModule.forFeature([CoreEffects]),
-        RouterModule
+        RouterModule,
+
+        SharedModule
     ],
-    providers: []
+    providers: [
+        EmailService
+    ]
 })
 export class CoreModule {}

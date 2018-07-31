@@ -1,4 +1,4 @@
-import { reducer, initialState } from './core.reducer';
+import { reducer, initialState } from './emails.reducer';
 
 describe('Core Reducer', () => {
   describe('unknown action', () => {
