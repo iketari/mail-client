@@ -25,6 +25,8 @@ export class AppComponent implements OnInit {
       select(fromCore.getAllEmails)
     ).subscribe(emails => this.emails = emails)
 
-    this.store.dispatch(new LoadEmails());
+    this.store.dispatch(new LoadEmails({
+      page: 1
+    }));
   }
 }

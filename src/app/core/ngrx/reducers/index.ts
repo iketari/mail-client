@@ -8,7 +8,7 @@ export interface CoreState {
 }
 
 export interface State extends fromRoot.State {
-    emails: CoreState;
+    core: CoreState;
 }
 
 export const reducers: ActionReducerMap<CoreState> = {
@@ -26,5 +26,9 @@ export const {
     selectIds: getEmailIds,
     selectEntities: getEmailEntities,
     selectAll: getAllEmails,
-    selectTotal: getTotalEmails,
   } = fromEmails.adapter.getSelectors(getEmailsEntitiesState);
+
+export const getTotalEmails = createSelector(
+    getCoreState,
+    state => state.emails.total
+)
