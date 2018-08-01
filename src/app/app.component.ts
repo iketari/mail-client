@@ -15,6 +15,9 @@ import * as fromCore from './core/ngrx/reducers';
 })
 export class AppComponent implements OnInit {
   public emails: IEmail[];
+  public emailsTotal: number;
+  public eamilsLimit: number;
+  public eamilsPage: number;
 
   constructor(
     private store: Store<fromRoot.State>
@@ -23,10 +26,27 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.store.pipe(
       select(fromCore.getAllEmails)
-    ).subscribe(emails => this.emails = emails)
+    ).subscribe(emails => this.emails = emails);
+
+    this.store.pipe(
+      select(fromCore.getTotalEmails)
+    ).subscribe(total => this.emailsTotal = total);
+
+    this.store.pipe(
+      select(fromCore.getEmailsLimit)
+    ).subscribe(limit => this.eamilsLimit = limit);
+
+    this.store.pipe(
+      select(fromCore.getCurrentEmailsPage)
+    ).subscribe(page => this.eamilsPage = page);
+
 
     this.store.dispatch(new LoadEmails({
       page: 1
     }));
+  }
+
+  public onPaginationChange(page: number) {
+    this.store.dispatch(new LoadEmails({ page }));
   }
 }

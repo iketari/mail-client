@@ -9,6 +9,7 @@ import { environment } from '../environments/environment';
 import { CoreModule } from './core/core.module';
 import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -17,6 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot([]),
     HttpClientModule,
+    SharedModule,
     CoreModule,
 
     !environment.production ? StoreDevtoolsModule.instrument() : []

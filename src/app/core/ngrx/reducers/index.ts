@@ -32,3 +32,13 @@ export const getTotalEmails = createSelector(
     getCoreState,
     state => state.emails.total
 )
+
+export const getCurrentEmailsPage = createSelector(
+    getCoreState,
+    state => state.emails.page
+)
+
+export const getEmailsLimit = createSelector(
+    getCoreState,
+    state => state.emails.limit
+)

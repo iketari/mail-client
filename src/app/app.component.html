@@ -1,6 +1,17 @@
 Emails:
 <ul>
   <li *ngFor="let email of emails" >
-    <a href="">{{email.subject}}</a>
+    From: {{email.from}}<br>
+    To: {{email.to}}<br>
+    Subject: {{ email.subject }}
+    <p>
+      {{email.body?.slice(0, 100)}}...
+    </p>
   </li>
 </ul>
+
+<pagination
+  (change)="onPaginationChange($event)"
+  [total]="emailsTotal"
+  [page]="eamilsPage"
+  [limit]="eamilsLimit"></pagination>

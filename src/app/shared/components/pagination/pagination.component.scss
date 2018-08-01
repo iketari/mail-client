@@ -1,0 +1,10 @@
+li {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.active {
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.6;
+}
