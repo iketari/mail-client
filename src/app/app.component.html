@@ -1,3 +1,8 @@
+<pagination
+  (change)="onPaginationChange($event)"
+  [total]="emailsTotal"
+  [page]="eamilsPage"
+  [limit]="eamilsLimit"></pagination>
 Emails:
 <ul>
   <li *ngFor="let email of emails" >
@@ -9,9 +14,3 @@ Emails:
     </p>
   </li>
 </ul>
-
-<pagination
-  (change)="onPaginationChange($event)"
-  [total]="emailsTotal"
-  [page]="eamilsPage"
-  [limit]="eamilsLimit"></pagination>

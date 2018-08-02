@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { IEmail } from '../../shared/models/email';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { IListResult } from '../../shared/models/listresult';
 
