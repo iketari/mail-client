@@ -1,0 +1,20 @@
+sudo: required
+dist: trusty
+language: node_js
+node_js:
+  - 8.9
+before_script:
+  - npm install
+script:
+  - npm run build:prod
+deploy:
+  provider: pages
+  local-dir: dist/mail-client
+  skip-cleanup: true
+  github-token: "$GITHUB_TOKEN"
+  keep-history: true
+  on:
+    branch: master
+env:
+  global:
+    secure: aiky0MIkYKKbpgeAyJ8ABkO03BECRJkm1y9PMJQEmH76UafVWe4TRV6mHP2r2eyWf7MlMrx7tnVr9BjArAJ20yeSBCzrVLkqMP9XSM970g4N5YBtEKuEi3fzlU0ffU4wTlhpBLPHF0gqKfOmYasERVunwu5XAebqvpKNSKMFj7stxNhcisOqI2OpGEliWjNON9uu6kIE4Di21ItpQ0Iu97f+5ly/0PwgLvYEs8cIljABOYj7gdO5jSM6O3RpDvk50/9x7tASpeoysokiwFheUSM8qjOxOMQCNZaNbYnfOti6VTQt7N2qltIG1F0eIrIpcdDP2A+6dyBS/EN3X3QP6nhwrlKvYyShwMugwBg8DS7uoEPJQ/XLlRCSLROcA3LJyuen1kZBbC7bfEIGyeWnH68Tz+FwXn7DwzfqSbakY0Hdpx3mtHT0Ha+X9L7uC+03RfsCaV8ArkCUMfwDAgrwN6veAdUXUv84wiwhohBlmAwqeXihnjyw56z8ybpzhNkpUonxdjkFnAuqzGN/i3Ga+joHE0tZI4YJo98jhjKX+RSvA8LmmBKHsGDLHDboNCsQUk7zwzxfxwmcPipp3z1sB6NQ48FAyDMLB97AmPRyytsj3IxlXqG3Fh1uMeAMTp54JAAYW+GnQAEwbME4EkCyFEdWM2gUEePU5xUf0IYs+7Q=

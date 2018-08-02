@@ -6,6 +6,7 @@
     "start": "concurrently --kill-others \"npm run start:dev\" \"npm run mock:server\"",
     "start:dev": "ng serve",
     "build": "ng build",
+    "build:prod": "ng build --prod",
     "test": "jest",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -78,7 +79,7 @@
     ]
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "<rootDir>/src/setup-jest.ts",
+    "setupTestFrameworkScriptFile": "<rootDir>/setup-jest.ts",
     "globals": {
       "ts-jest": {
         "tsConfigFile": "src/tsconfig.spec.json"
