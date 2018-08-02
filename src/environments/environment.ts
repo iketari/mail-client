@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  emailServiceUrl: 'http://localhost:3000'
+  emailServiceUrl: 'http://localhost:3000',
+  emailsPath: 'emails'
 };
 
 /*

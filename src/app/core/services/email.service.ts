@@ -14,7 +14,7 @@ export class EmailService {
      * Get all emails from the server side
      */
     public getEmais(limit = 1, offset = 0) {
-        return this.httpClient.get<IEmail[]>(`${this._getBaseUrl()}/emails`);
+        return this.httpClient.get<IEmail[]>(`${this._getBaseUrl()}/${environment.emailsPath}`);
     }
 
     /**
