@@ -24,12 +24,15 @@
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/assets/emails.json"
             ],
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "baseHref": "/mail-client/",
+            "deployUrl": "/mail-client/"
           },
           "configurations": {
             "production": {
