@@ -10,12 +10,9 @@ export interface State extends EntityState<IEmail> {
   limit: number;
 }
 
-export const adapter: EntityAdapter<IEmail> =
-  createEntityAdapter <
-  IEmail >
-  {
-    selectId: (email: IEmail) => email.id
-  };
+export const adapter: EntityAdapter<IEmail> = createEntityAdapter<IEmail>({
+  selectId: (email: IEmail) => email.id
+});
 
 export const initialState: State = adapter.getInitialState({
   loading: false,
