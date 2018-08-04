@@ -2,6 +2,6 @@
     <letter-list-item [message]="email" *ngFor="let email of emails | paginate: { id: 'emails', itemsPerPage: 10, currentPage: eamilsPage, totalItems: emailsTotal }"></letter-list-item>
 </div>
 <div class="pagination">
-    <div class="spinner" [ngClass]="{ 'hidden': !loading }"></div>
+    <div class="spinner" [ngClass]="{ 'hidden': !eamilsLoading }"></div>
     <pagination-controls (pageChange)="onPaginationChange($event)" id="emails"></pagination-controls>
 </div>

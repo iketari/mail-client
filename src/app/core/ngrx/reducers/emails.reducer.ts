@@ -26,15 +26,17 @@ export function reducer(state = initialState, action: CoreActions): State {
     case CoreActionTypes.LoadEmails:
       return {
         ...state,
-        loading: true,
-        page: action.payload.page
+        loading: true
       };
 
     case CoreActionTypes.LoadEmailsSuccess:
+      const { page, limit, total } = action.payload;
       return {
         ...adapter.addAll(action.payload.items, state),
         loading: false,
-        total: action.payload.total
+        page,
+        limit,
+        total
       };
 
     case CoreActionTypes.LoadEmailsFail:

@@ -1,4 +1,6 @@
 export interface IListResult<T> {
-    items: T[]
-    total: number
+  items: T[];
+  page: number;
+  limit: number;
+  total: number;
 }
