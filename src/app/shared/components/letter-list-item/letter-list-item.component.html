@@ -2,5 +2,5 @@
   <span class="letter-list-item__avatar" [ngStyle]="{'background-color': stringToColour(message.from)}">{{getInitials()}}</span>
   <span class="letter-list-item__name">{{message.from}}</span>
   <span class="letter-list-item__subject">{{message.subject}}</span>
-  <span class="letter-list-item__date">{{message.date}}</span>
+  <span class="letter-list-item__date">{{message.date | date:'short'}}</span>
 </a>
