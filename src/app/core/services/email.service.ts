@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, filter } from 'rxjs/operators';
-import { IEmail } from '../../shared/models/message';
+import { IEmail, IEmailSearchResult } from '../../shared/models/message';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { IListResult } from '../../shared/models/listresult';

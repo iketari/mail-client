@@ -8,6 +8,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { CoreEffects } from './ngrx/effects/core.effects';
 import { SharedModule } from '../shared/shared.module';
 import { EmailService } from './services/email.service';
+import { BackendService } from './services/backend.service';
 
 @NgModule({
   declarations: [],
@@ -19,6 +20,6 @@ import { EmailService } from './services/email.service';
 
     SharedModule
   ],
-  providers: [EmailService]
+  providers: [EmailService, BackendService]
 })
 export class CoreModule {}
