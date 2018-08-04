@@ -20,7 +20,7 @@ export const reducers: ActionReducerMap<CoreState> = {
   emails: fromEmails.reducer
 };
 
-export const getCoreState = createFeatureSelector < CoreState > 'core';
+export const getCoreState = createFeatureSelector<CoreState>('core');
 
 export const getEmailsEntitiesState = createSelector(getCoreState, (state) => state.emails);
 
