@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
-import { IMessage } from '../../models/message';
+import { IEmail } from '../../models/message';
 
 @Component({
   selector: 'letter-list-item',
@@ -9,7 +9,7 @@ import { IMessage } from '../../models/message';
 })
 export class LetterListItemComponent {
   @Input()
-  message: IMessage;
+  message: IEmail;
 
   /**
    * getInitials
