@@ -1,5 +1,0 @@
-<ul *ngIf="totalPages() > 1" class="pagination">
-  <li *ngIf="page != 1"><a (click)="pageClicked(prevPage())">«</a></li>
-  <li *ngFor="let p of pagesRange()"><a href="#" [ngClass]="{'active': page === p}" (click)="pageClicked(p)">{{p}}</a></li>
-  <li *ngIf="totalPages() > page"><a href="#" (click)="pageClicked(nextPage())">»</a></li>
-</ul>

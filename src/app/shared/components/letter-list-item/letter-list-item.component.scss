@@ -1,0 +1,33 @@
+.letter-list-item {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    margin-bottom: 5px;
+
+    &__avatar {
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        text-transform: uppercase;
+        border-radius: 100%;
+        background-color: #28558f;
+        color: #cecece;
+    }
+
+    &__name,
+    &__subject,
+    &__date {
+        flex-basis: 25%;
+        flex-grow: 0;
+    }
+
+    &__subject {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}

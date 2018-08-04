@@ -27,7 +27,9 @@
     "@ngrx/entity": "^6.0.1",
     "@ngrx/store": "^6.0.1",
     "@ngrx/store-devtools": "^6.0.1",
+    "blueimp-md5": "^2.10.0",
     "core-js": "^2.5.4",
+    "ngx-pagination": "^3.1.1",
     "rxjs": "^6.0.0",
     "zone.js": "~0.8.26"
   },
@@ -73,7 +75,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,ts,css,md}": [
+    "*.{js,ts}": [
       "prettier --write",
       "git add"
     ]
@@ -102,9 +104,7 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/"
     ],
-    "moduleNameMapper": {
-
-    },
+    "moduleNameMapper": {},
     "transformIgnorePatterns": [
       "node_modules/(?!@ngrx)"
     ],

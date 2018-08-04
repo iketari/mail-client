@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { IEmail } from '../../../shared/models/email';
+import { IEmail } from '../../../shared/models/message';
 import { IListResult } from '../../../shared/models/listresult';
 
 export enum CoreActionTypes {
@@ -10,7 +10,7 @@ export enum CoreActionTypes {
 
 export class LoadEmails implements Action {
   readonly type = CoreActionTypes.LoadEmails;
-  constructor(public payload: { page: number }) {};
+  constructor(public payload: { page: number }) {}
 }
 
 export class LoadEmailsSuccess implements Action {
@@ -23,6 +23,4 @@ export class LoadEmailsFail implements Action {
   constructor(public payload: any) {}
 }
 
-export type CoreActions = LoadEmails
-  | LoadEmailsSuccess
-  | LoadEmailsFail;
+export type CoreActions = LoadEmails | LoadEmailsSuccess | LoadEmailsFail;

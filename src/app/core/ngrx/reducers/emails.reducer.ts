@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { CoreActions, CoreActionTypes } from '../actions/core.actions';
-import { IEmail } from '../../../shared/models/email';
+import { IEmail } from '../../../shared/models/message';
 
 export interface State extends EntityState<IEmail> {
   loading: boolean;
@@ -10,9 +10,12 @@ export interface State extends EntityState<IEmail> {
   limit: number;
 }
 
-export const adapter: EntityAdapter<IEmail> = createEntityAdapter<IEmail>({
-  selectId: (email: IEmail) => email.from + email.to.join('|') + email.subject
-});
+export const adapter: EntityAdapter<IEmail> =
+  createEntityAdapter <
+  IEmail >
+  {
+    selectId: (email: IEmail) => email.id
+  };
 
 export const initialState: State = adapter.getInitialState({
   loading: false,
@@ -23,7 +26,6 @@ export const initialState: State = adapter.getInitialState({
 
 export function reducer(state = initialState, action: CoreActions): State {
   switch (action.type) {
-
     case CoreActionTypes.LoadEmails:
       return {
         ...state,
@@ -48,3 +50,5 @@ export function reducer(state = initialState, action: CoreActions): State {
       return state;
   }
 }
+
+export const getLoading = (state: State) => state.loading;

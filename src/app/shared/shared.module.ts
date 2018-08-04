@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PaginationComponent } from './components/pagination/pagination.component';
+import { LetterListItemComponent } from './components/letter-list-item/letter-list-item.component';
 
-const COMPONENTS = [PaginationComponent];
+const COMPONENTS = [LetterListItemComponent];
 
 @NgModule({
-    declarations: COMPONENTS,
-    imports: [ CommonModule ],
-    exports: COMPONENTS,
-    providers: [],
+  declarations: COMPONENTS,
+  imports: [CommonModule],
+  exports: COMPONENTS,
+  providers: []
 })
 export class SharedModule {}

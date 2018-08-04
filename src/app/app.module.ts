@@ -10,6 +10,7 @@ import { CoreModule } from './core/core.module';
 import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +21,8 @@ import { SharedModule } from './shared/shared.module';
     HttpClientModule,
     SharedModule,
     CoreModule,
+
+    NgxPaginationModule,
 
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],

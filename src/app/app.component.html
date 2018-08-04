@@ -1,16 +1,7 @@
-<pagination
-  (change)="onPaginationChange($event)"
-  [total]="emailsTotal"
-  [page]="eamilsPage"
-  [limit]="eamilsLimit"></pagination>
-Emails:
-<ul>
-  <li *ngFor="let email of emails" >
-    From: {{email.from}}<br>
-    To: {{email.to}}<br>
-    Subject: {{ email.subject }}
-    <p>
-      {{email.body?.slice(0, 100)}}...
-    </p>
-  </li>
-</ul>
+<div class="messages-list">
+    <letter-list-item [message]="email" *ngFor="let email of emails | paginate: { id: 'emails', itemsPerPage: 10, currentPage: eamilsPage, totalItems: emailsTotal }"></letter-list-item>
+</div>
+<div class="pagination">
+    <div class="spinner" [ngClass]="{ 'hidden': !loading }"></div>
+    <pagination-controls (pageChange)="onPaginationChange($event)" id="emails"></pagination-controls>
+</div>
