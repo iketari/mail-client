@@ -8,12 +8,3 @@ export interface IEmail {
   date: Date;
   id?: string;
 }
-
-export interface IEmailSearchResult extends IEmail {
-  filteredBy: string[];
-  highlights: {
-    [field: string]: IHighlightRange[];
-  };
-}
-
-export type IHighlightRange = Array<[number, number]>;

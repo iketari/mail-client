@@ -5,3 +5,15 @@ export interface ISearchQuery {
   from: string;
   to: string[];
 }
+
+export interface ISearchResult<T> {
+  originalItem: T;
+  filteredBy: {
+    [field: string]: boolean;
+  };
+  highlights: {
+    [field: string]: THighlightRange[];
+  };
+}
+
+export type THighlightRange = [number, number];
