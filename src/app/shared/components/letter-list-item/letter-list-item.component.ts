@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ChangeDetectionStrategy,
+  Output,
+  EventEmitter
+} from '@angular/core';
 import { IEmail } from '../../models/message';
 import { ISearchResult } from '../../models/search';
 
@@ -11,6 +18,16 @@ import { ISearchResult } from '../../models/search';
 export class LetterListItemComponent {
   @Input()
   message: ISearchResult<IEmail>;
+
+  @Output()
+  select = new EventEmitter<ISearchResult<IEmail>>();
+
+  /**
+   * onItemClick
+   */
+  public onItemClick() {
+    this.select.emit(this.message);
+  }
 
   /**
    * getInitials

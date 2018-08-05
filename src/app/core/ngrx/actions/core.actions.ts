@@ -3,24 +3,24 @@ import { IEmail } from '../../../shared/models/message';
 import { IListResult } from '../../../shared/models/listresult';
 
 export enum CoreActionTypes {
-  LoadEmails = '[Core] Load Emails',
-  LoadEmailsSuccess = '[Core] Load Emails Success',
-  LoadEmailsFail = '[Core] Load Emails Fail'
+  LoadEmail = '[Core] Load Email',
+  LoadEmailSuccess = '[Core] Load Email Success',
+  LoadEmailFail = '[Core] Load Email Fail'
 }
 
-export class LoadEmails implements Action {
-  readonly type = CoreActionTypes.LoadEmails;
-  constructor(public payload: { page: number }) {}
+export class LoadEmail implements Action {
+  readonly type = CoreActionTypes.LoadEmail;
+  constructor(public payload: { id: string }) {}
 }
 
-export class LoadEmailsSuccess implements Action {
-  readonly type = CoreActionTypes.LoadEmailsSuccess;
-  constructor(public payload: IListResult<IEmail>) {}
+export class LoadEmailSuccess implements Action {
+  readonly type = CoreActionTypes.LoadEmailSuccess;
+  constructor(public payload: IEmail) {}
 }
 
-export class LoadEmailsFail implements Action {
-  readonly type = CoreActionTypes.LoadEmailsFail;
+export class LoadEmailFail implements Action {
+  readonly type = CoreActionTypes.LoadEmailFail;
   constructor(public payload: any) {}
 }
 
-export type CoreActions = LoadEmails | LoadEmailsSuccess | LoadEmailsFail;
+export type CoreActions = LoadEmail | LoadEmailSuccess | LoadEmailFail;

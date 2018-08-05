@@ -8,6 +8,8 @@ import {
 import * as fromEmails from './emails.reducer';
 import * as fromSearch from './search.reducer';
 import * as fromRoot from '../../../reducers';
+import { ISearchResult } from '../../../shared/models/search';
+import { IEmail } from '../../../shared/models/message';
 
 export interface CoreState {
   emails: fromEmails.State;
@@ -25,19 +27,22 @@ export const reducers: ActionReducerMap<CoreState> = {
 
 export const getCoreState = createFeatureSelector<CoreState>('core');
 
-export const getEmailsEntitiesState = createSelector(getCoreState, (state) => state.emails);
+// emails selectors
+export const getEmailsState = createSelector(getCoreState, (state) => state.emails);
+export const getEmailsLoading = createSelector(getEmailsState, fromEmails.getLoading);
+export const getEmailsSelected = createSelector(getCoreState, (state) => {
+  const { selected } = state.emails;
 
-export const {
-  selectIds: getEmailIds,
-  selectEntities: getEmailEntities,
-  selectAll: getAllEmails
-} = fromEmails.adapter.getSelectors(getEmailsEntitiesState);
+  if (!selected || !state.search.entities[selected.id]) {
+    return null;
+  }
 
-export const getTotalEmails = createSelector(getCoreState, (state) => state.emails.total);
-export const getCurrentEmailsPage = createSelector(getCoreState, (state) => state.emails.page);
-export const getEmailsLimit = createSelector(getCoreState, (state) => state.emails.limit);
-
-export const getEmailsLoading = createSelector(getEmailsEntitiesState, fromEmails.getLoading);
+  return {
+    originalItem: selected,
+    highlights: state.search.entities[selected.id].highlights,
+    filteredBy: state.search.entities[selected.id].filteredBy
+  } as ISearchResult<IEmail>;
+});
 
 // search selectors
 export const getSearchResultsEntitiesState = createSelector(getCoreState, (state) => state.search);

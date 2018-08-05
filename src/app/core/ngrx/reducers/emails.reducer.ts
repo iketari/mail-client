@@ -3,46 +3,34 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { CoreActions, CoreActionTypes } from '../actions/core.actions';
 import { IEmail } from '../../../shared/models/message';
 
-export interface State extends EntityState<IEmail> {
+export interface State {
   loading: boolean;
-  total: number;
-  page: number;
-  limit: number;
+  selected: IEmail;
 }
 
-export const adapter: EntityAdapter<IEmail> = createEntityAdapter<IEmail>({
-  selectId: (email: IEmail) => email.id
-});
-
-export const initialState: State = adapter.getInitialState({
+export const initialState: State = {
   loading: false,
-  total: 0,
-  page: 0,
-  limit: 10
-});
+  selected: null
+};
 
 export function reducer(state = initialState, action: CoreActions): State {
   switch (action.type) {
-    case CoreActionTypes.LoadEmails:
+    case CoreActionTypes.LoadEmail:
       return {
         ...state,
         loading: true
       };
 
-    case CoreActionTypes.LoadEmailsSuccess:
-      const { page, limit, total } = action.payload;
+    case CoreActionTypes.LoadEmailSuccess:
+      const email = action.payload;
       return {
-        ...adapter.addAll(action.payload.items, state),
         loading: false,
-        page,
-        limit,
-        total
+        selected: email
       };
 
-    case CoreActionTypes.LoadEmailsFail:
+    case CoreActionTypes.LoadEmailFail:
       return {
-        ...initialState,
-        limit: state.limit
+        ...initialState
       };
 
     default:
@@ -51,3 +39,4 @@ export function reducer(state = initialState, action: CoreActions): State {
 }
 
 export const getLoading = (state: State) => state.loading;
+export const getSelected = (state: State) => state.selected;

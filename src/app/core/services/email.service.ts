@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, filter } from 'rxjs/operators';
+import { catchError, map, filter, find } from 'rxjs/operators';
 import { IEmail } from '../../shared/models/message';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { IListResult } from '../../shared/models/listresult';
 import md5 from 'blueimp-md5';
 import { ISearchQuery, ISearchResult } from '../../shared/models/search';
-import { until } from '../../../../node_modules/protractor';
+import { until } from 'protractor';
 
 const MAX_DATE = new Date(8640000000000000);
 const MIN_DATE = new Date(-8640000000000000);
@@ -19,7 +19,7 @@ export class EmailService {
   /**
    * Get all emails from the server side
    */
-  public getEmais(limit = 1, offset = 0): Observable<IEmail[]> {
+  public getEmails(): Observable<IEmail[]> {
     return this.httpClient.get<IEmail[]>(`${this._getBaseUrl()}/${environment.emailsPath}`).pipe(
       map((emails: IEmail[]) =>
         emails.map((email: IEmail) => ({
@@ -32,13 +32,22 @@ export class EmailService {
   }
 
   /**
+   * Get all an email from the server side
+   */
+  public getEmail(id: string): Observable<IEmail> {
+    return this.getEmails().pipe(
+      map((emails: IEmail[]) => emails.find((email: IEmail) => email.id === id))
+    );
+  }
+
+  /**
    * Get paginated results
    */
   public getPaginatedEmails(page: number = 1, limit: number = 10): Observable<IListResult<IEmail>> {
     const firstIndex = (page - 1) * limit;
     const lastIndex = limit * page;
 
-    return this.getEmais().pipe(
+    return this.getEmails().pipe(
       map((emails) => ({
         page,
         limit,
@@ -56,7 +65,7 @@ export class EmailService {
     page: number = 1,
     limit: number = 10
   ): Observable<IListResult<ISearchResult<IEmail>>> {
-    const source = this.getEmais().pipe(
+    const source = this.getEmails().pipe(
       map(this.covertToResults()),
       map(this.filterByFrom<IEmail>(params)),
       map(this.filterByTo<IEmail>(params)),

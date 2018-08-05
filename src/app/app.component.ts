@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { FormGroup, FormControl } from '@angular/forms';
 
-import { LoadEmails } from './core/ngrx/actions/core.actions';
+import { LoadEmail } from './core/ngrx/actions/core.actions';
 import { map } from 'rxjs/operators';
 import { IEmail } from './shared/models/message';
 
@@ -14,10 +14,11 @@ import { ISearchResult } from './shared/models/search';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
   public results: ISearchResult<IEmail>[];
+  public selectedEmail: ISearchResult<IEmail>;
   public emailsTotal: number;
   public eamilsLimit: number;
   public eamilsLoading: boolean;
@@ -54,12 +55,20 @@ export class AppComponent implements OnInit {
       .pipe(select(fromCore.getCurrentSearchResultsPage))
       .subscribe((page) => (this.eamilsPage = page));
 
+    this.store
+      .pipe(select(fromCore.getEmailsSelected))
+      .subscribe((selected) => (this.selectedEmail = selected));
+
     this.store.dispatch(
       new LoadSearchResults({
         page: 1,
         params: {}
       })
     );
+  }
+
+  public onItemSelect(item: ISearchResult<IEmail>) {
+    this.store.dispatch(new LoadEmail({ id: item.originalItem.id }));
   }
 
   public onPaginationChange(page: number) {
@@ -76,5 +85,32 @@ export class AppComponent implements OnInit {
     };
 
     this.store.dispatch(new LoadSearchResults({ page: this.eamilsPage, params }));
+  }
+
+  public getInitials(): string {
+    const { from } = this.selectedEmail.originalItem;
+    const parts = from.split(' ');
+    let result = '';
+
+    if (parts[0] && parts[1]) {
+      result = parts[0].charAt(0) + parts[1].charAt(0);
+    } else {
+      result = from.slice(0, 2);
+    }
+
+    return result;
+  }
+
+  public stringToColour(str: string): string {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    let colour = '#';
+    for (let i = 0; i < 3; i++) {
+      const value = (hash >> (i * 8)) & 0xff;
+      colour += ('00' + value.toString(16)).substr(-2);
+    }
+    return colour;
   }
 }

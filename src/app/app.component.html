@@ -1,4 +1,58 @@
-<form (ngSubmit)="onSubmit()" [formGroup]="searchForm">
+<div id="layout" class="content pure-g">
+    <div id="nav" class="pure-u"> <!-- TODO: Make a component -->
+        <a href="#" class="nav-menu-button">Menu</a>
+
+        <div class="nav-inner">
+            <button class="primary-button pure-button">Compose</button>
+
+            <div class="pure-menu">
+                <ul class="pure-menu-list">
+                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">Inbox <span class="email-count">(2)</span></a></li>
+                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">Important</a></li>
+                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">Sent</a></li>
+                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">Drafts</a></li>
+                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">Trash</a></li>
+                    <li class="pure-menu-heading">Labels</li>
+                    <li class="pure-menu-item"><a href="#" class="pure-menu-link"><span class="email-label-personal"></span>Personal</a></li>
+                    <li class="pure-menu-item"><a href="#" class="pure-menu-link"><span class="email-label-work"></span>Work</a></li>
+                    <li class="pure-menu-item"><a href="#" class="pure-menu-link"><span class="email-label-travel"></span>Travel</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="list" class="pure-u-1">
+        <div class="list-scrollable">
+            <letter-list-item (select)="onItemSelect($event)" [message]="result" *ngFor="let result of results | paginate: { id: 'emails', itemsPerPage: 10, currentPage: eamilsPage, totalItems: emailsTotal }"></letter-list-item>
+        </div>
+        <div class="pagination">
+            <div class="spinner" [ngClass]="{ 'hidden': !eamilsLoading }"></div>
+            <pagination-controls [previousLabel]="null" [nextLabel]="null" (pageChange)="onPaginationChange($event)" id="emails"></pagination-controls>
+        </div>
+    </div>
+
+    <div id="main" class="pure-u-1">
+        <div *ngIf="selectedEmail" class="email-content">
+            <div class="email-content-header pure-g">
+                <div class="pure-u-1-5">
+                        <span class="email-avatar" [ngStyle]="{'background-color': stringToColour(selectedEmail.originalItem.from)}">{{getInitials()}}</span>
+                </div>
+                <div class="pure-u-1-2">
+                    <h1 class="email-content-title">{{selectedEmail.originalItem.subject}}</h1>
+                    <p class="email-content-subtitle">
+                        From <a>{{selectedEmail.originalItem.from}}</a> at <span>{{selectedEmail.originalItem.date | date:'full'}}</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="email-content-body">
+                {{selectedEmail.originalItem.body}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <form (ngSubmit)="onSubmit()" [formGroup]="searchForm">
     <fieldset>
         <label for="date_from">Date from</label>
         <input id="date_from" type="date" formControlName="date_from"/>
@@ -24,4 +78,4 @@
 <div class="pagination">
     <div class="spinner" [ngClass]="{ 'hidden': !eamilsLoading }"></div>
     <pagination-controls (pageChange)="onPaginationChange($event)" id="emails"></pagination-controls>
-</div>
+</div> -->

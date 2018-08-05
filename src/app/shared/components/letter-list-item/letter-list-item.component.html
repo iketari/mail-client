@@ -1,6 +1,11 @@
-<a class="letter-list-item" href="#">
-  <span class="letter-list-item__avatar" [ngStyle]="{'background-color': stringToColour(message.originalItem.from)}">{{getInitials()}}</span>
-  <span class="letter-list-item__name">{{message.originalItem.from}}</span>
-  <span class="letter-list-item__subject">{{message.originalItem.subject}}</span>
-  <span class="letter-list-item__date">{{message.originalItem.date | date:'short'}}</span>
-</a>
+<div (click)="onItemClick()" class="email-item pure-g" [ngClass]="{'email-item-selected': false}">
+    <div class="pure-u">
+      <span class="email-avatar" [ngStyle]="{'background-color': stringToColour(message.originalItem.from)}">{{getInitials()}}</span>
+    </div>
+
+    <div class="pure-u-3-4">
+        <h5 class="email-name">{{message.originalItem.from}}</h5>
+        <h4 class="email-subject">{{message.originalItem.subject || '&nbsp;'}}</h4>
+        <h6 class="email-date">{{message.originalItem.date | date:'short'}}</h6>
+    </div>
+</div>

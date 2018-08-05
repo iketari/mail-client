@@ -3,9 +3,9 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import {
   CoreActions,
   CoreActionTypes,
-  LoadEmails,
-  LoadEmailsSuccess,
-  LoadEmailsFail
+  LoadEmail,
+  LoadEmailSuccess,
+  LoadEmailFail
 } from '../actions/core.actions';
 import { Observable, of } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
@@ -26,20 +26,15 @@ import { IListResult } from '../../../shared/models/listresult';
 @Injectable()
 export class CoreEffects {
   @Effect()
-  public loadEmails$: Observable<Action> = this.actions$.pipe(
-    ofType<LoadEmails>(CoreActionTypes.LoadEmails),
-    withLatestFrom(this.store),
-    switchMap(([action, state]) => {
-      return this.emailService.search(
-        { query: 'you' },
-        action.payload.page,
-        state.core.emails.limit
-      );
+  public loadEmail$: Observable<Action> = this.actions$.pipe(
+    ofType<LoadEmail>(CoreActionTypes.LoadEmail),
+    switchMap(({ payload }) => {
+      return this.emailService.getEmail(payload.id);
     }),
-    map((emails) => {
-      return new LoadEmailsSuccess(null);
+    map((email: IEmail) => {
+      return new LoadEmailSuccess(email);
     }),
-    catchError((err) => of(new LoadEmailsFail(err)))
+    catchError((err) => of(new LoadEmailFail(err)))
   );
 
   @Effect()
@@ -48,7 +43,7 @@ export class CoreEffects {
     withLatestFrom(this.store),
     switchMap(([action, state]) => {
       const { params, page } = action.payload;
-      return this.emailService.search(params || {}, page, state.core.emails.limit);
+      return this.emailService.search(params || {}, page, state.core.search.limit);
     }),
     map((results: IListResult<ISearchResult<IEmail>>) => {
       return new LoadSearchResultsSuccess(results);
