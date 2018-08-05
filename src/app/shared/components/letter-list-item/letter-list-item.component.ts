@@ -6,8 +6,8 @@ import {
   Output,
   EventEmitter
 } from '@angular/core';
-import { IEmail } from '../../models/message';
-import { ISearchResult } from '../../models/search';
+import { ISearchResult } from '../../../shared/models/search';
+import { IEmail } from '../../../shared/models/message';
 
 @Component({
   selector: 'letter-list-item',
@@ -19,6 +19,9 @@ export class LetterListItemComponent {
   @Input()
   message: ISearchResult<IEmail>;
 
+  @Input()
+  selected: boolean;
+
   @Output()
   select = new EventEmitter<ISearchResult<IEmail>>();
 
@@ -27,35 +30,5 @@ export class LetterListItemComponent {
    */
   public onItemClick() {
     this.select.emit(this.message);
-  }
-
-  /**
-   * getInitials
-   */
-  public getInitials(): string {
-    const { from } = this.message.originalItem;
-    const parts = from.split(' ');
-    let result = '';
-
-    if (parts[0] && parts[1]) {
-      result = parts[0].charAt(0) + parts[1].charAt(0);
-    } else {
-      result = from.slice(0, 2);
-    }
-
-    return result;
-  }
-
-  public stringToColour(str: string): string {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    let colour = '#';
-    for (let i = 0; i < 3; i++) {
-      const value = (hash >> (i * 8)) & 0xff;
-      colour += ('00' + value.toString(16)).substr(-2);
-    }
-    return colour;
   }
 }

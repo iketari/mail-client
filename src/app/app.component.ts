@@ -8,7 +8,7 @@ import { IEmail } from './shared/models/message';
 
 import * as fromRoot from './reducers';
 import * as fromCore from './core/ngrx/reducers';
-import { LoadSearchResults } from './core/ngrx/actions/search.actions';
+import { LoadSearchResults, SelectResult } from './core/ngrx/actions/search.actions';
 import { ISearchResult } from './shared/models/search';
 
 @Component({
@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
       .subscribe((page) => (this.eamilsPage = page));
 
     this.store
-      .pipe(select(fromCore.getEmailsSelected))
+      .pipe(select(fromCore.getSelectedResult))
       .subscribe((selected) => (this.selectedEmail = selected));
 
     this.store.dispatch(
@@ -68,7 +68,7 @@ export class AppComponent implements OnInit {
   }
 
   public onItemSelect(item: ISearchResult<IEmail>) {
-    this.store.dispatch(new LoadEmail({ id: item.originalItem.id }));
+    this.store.dispatch(new SelectResult({ id: item.originalItem.id }));
   }
 
   public onPaginationChange(page: number) {

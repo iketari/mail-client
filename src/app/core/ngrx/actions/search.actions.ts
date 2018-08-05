@@ -6,7 +6,8 @@ import { ISearchQuery, ISearchResult } from '../../../shared/models/search';
 export enum SearchActionTypes {
   LoadSearchResults = '[Search] Load Results',
   LoadSearchResultsSuccess = '[Search] Load Results Success',
-  LoadSearchResultsFail = '[Search] Load Results Fail'
+  LoadSearchResultsFail = '[Search] Load Results Fail',
+  SelectSearchResult = '[Search] Select Result'
 }
 
 export class LoadSearchResults implements Action {
@@ -24,4 +25,13 @@ export class LoadSearchResultsFail implements Action {
   constructor(public payload: any) {}
 }
 
-export type SearchActions = LoadSearchResults | LoadSearchResultsSuccess | LoadSearchResultsFail;
+export class SelectResult implements Action {
+  readonly type = SearchActionTypes.SelectSearchResult;
+  constructor(public payload: { id: string }) {}
+}
+
+export type SearchActions =
+  | LoadSearchResults
+  | LoadSearchResultsSuccess
+  | LoadSearchResultsFail
+  | SelectResult;

@@ -1,0 +1,17 @@
+<div class="email-content">
+    <div class="email-content-header pure-g">
+        <div class="pure-u-1-5">
+          <letter-avatar class="email-avatar-large" [name]="message.originalItem.from"></letter-avatar>
+        </div>
+        <div class="pure-u-1-2">
+          <h1 class="email-content-title">{{message.originalItem.subject}}</h1>
+          <p class="email-content-subtitle">
+              From <a>{{message.originalItem.from}}</a> at <span>{{message.originalItem.date | date:'full'}}</span>
+          </p>
+        </div>
+    </div>
+
+    <div class="email-content-body">
+        {{message.originalItem.body}}
+    </div>
+</div>

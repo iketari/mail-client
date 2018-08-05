@@ -5,7 +5,10 @@ import { IEmail } from '../../../shared/models/message';
 import { ISearchResult } from '../../../shared/models/search';
 import { SearchActionTypes, SearchActions } from '../actions/search.actions';
 
+import cloneDeep from 'lodash/cloneDeep';
+
 export interface State extends EntityState<ISearchResult<IEmail>> {
+  selected: ISearchResult<IEmail>;
   loading: boolean;
   total: number;
   page: number;
@@ -19,6 +22,7 @@ export const adapter: EntityAdapter<ISearchResult<IEmail>> = createEntityAdapter
 });
 
 export const initialState: State = adapter.getInitialState({
+  selected: null,
   loading: false,
   total: 0,
   page: 0,
@@ -49,9 +53,21 @@ export function reducer(state = initialState, action: SearchActions): State {
         limit: state.limit
       };
 
+    case SearchActionTypes.SelectSearchResult:
+      let slected = state.entities[action.payload.id];
+
+      return {
+        ...state,
+        selected: cloneDeep(slected)
+      };
+
     default:
       return state;
   }
 }
 
 export const getLoading = (state: State) => state.loading;
+export const getSelected = (state: State) => state.selected;
+export const getTotal = (state: State) => state.total;
+export const getPage = (state: State) => state.page;
+export const getLimit = (state: State) => state.limit;

@@ -28,21 +28,9 @@ export const reducers: ActionReducerMap<CoreState> = {
 export const getCoreState = createFeatureSelector<CoreState>('core');
 
 // emails selectors
+// tode: remove unsed
 export const getEmailsState = createSelector(getCoreState, (state) => state.emails);
 export const getEmailsLoading = createSelector(getEmailsState, fromEmails.getLoading);
-export const getEmailsSelected = createSelector(getCoreState, (state) => {
-  const { selected } = state.emails;
-
-  if (!selected || !state.search.entities[selected.id]) {
-    return null;
-  }
-
-  return {
-    originalItem: selected,
-    highlights: state.search.entities[selected.id].highlights,
-    filteredBy: state.search.entities[selected.id].filteredBy
-  } as ISearchResult<IEmail>;
-});
 
 // search selectors
 export const getSearchResultsEntitiesState = createSelector(getCoreState, (state) => state.search);
@@ -55,12 +43,20 @@ export const {
 
 export const getTotalSearchResults = createSelector(getCoreState, (state) => state.search.total);
 export const getCurrentSearchResultsPage = createSelector(
-  getCoreState,
-  (state) => state.search.page
+  getSearchResultsEntitiesState,
+  fromSearch.getPage
 );
-export const getSearchResultsLimit = createSelector(getCoreState, (state) => state.search.limit);
+export const getSearchResultsLimit = createSelector(
+  getSearchResultsEntitiesState,
+  fromSearch.getLimit
+);
 
 export const getSearchResultsLoading = createSelector(
   getSearchResultsEntitiesState,
   fromSearch.getLoading
+);
+
+export const getSelectedResult = createSelector(
+  getSearchResultsEntitiesState,
+  fromSearch.getSelected
 );

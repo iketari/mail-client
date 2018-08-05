@@ -1,6 +1,6 @@
-<div (click)="onItemClick()" class="email-item pure-g" [ngClass]="{'email-item-selected': false}">
+<div (click)="onItemClick()" class="email-item pure-g" [ngClass]="{'email-item-selected': selected}">
     <div class="pure-u">
-      <span class="email-avatar" [ngStyle]="{'background-color': stringToColour(message.originalItem.from)}">{{getInitials()}}</span>
+        <letter-avatar [name]="message.originalItem.from"></letter-avatar>
     </div>
 
     <div class="pure-u-3-4">
