@@ -1,11 +1,11 @@
 import { Action } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { CoreActions, CoreActionTypes } from '../actions/core.actions';
 import { IEmail } from '../../../shared/models/message';
-import { ISearchResult } from '../../../shared/models/search';
+import { ISearchResult, ISearchQuery } from '../../../shared/models/search';
 import { SearchActionTypes, SearchActions } from '../actions/search.actions';
 
 import cloneDeep from 'lodash/cloneDeep';
+import { stat } from 'fs';
 
 export interface State extends EntityState<ISearchResult<IEmail>> {
   selected: ISearchResult<IEmail>;
@@ -13,6 +13,7 @@ export interface State extends EntityState<ISearchResult<IEmail>> {
   total: number;
   page: number;
   limit: number;
+  searchQuery: ISearchQuery;
 }
 
 export const adapter: EntityAdapter<ISearchResult<IEmail>> = createEntityAdapter<
@@ -26,7 +27,14 @@ export const initialState: State = adapter.getInitialState({
   loading: false,
   total: 0,
   page: 0,
-  limit: 10
+  limit: 10,
+  searchQuery: {
+    from: null,
+    to: [],
+    date_from: null,
+    date_to: null,
+    query: null
+  }
 });
 
 export function reducer(state = initialState, action: SearchActions): State {
@@ -59,6 +67,29 @@ export function reducer(state = initialState, action: SearchActions): State {
       return {
         ...state,
         selected: cloneDeep(slected)
+      };
+
+    case SearchActionTypes.ChangeSearchParticipantsParams:
+      const { to, from } = action.payload;
+      let newFrom = state.searchQuery.from;
+      let newTo = state.searchQuery.to;
+
+      if (from !== undefined) {
+        newFrom = from !== null ? from.email : null;
+      }
+
+      if (to !== undefined) {
+        newTo = to.map((participant) => participant.email);
+      }
+
+      return {
+        ...state,
+        loading: true,
+        searchQuery: {
+          ...state.searchQuery,
+          from: newFrom,
+          to: newTo
+        }
       };
 
     default:

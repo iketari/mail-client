@@ -1,12 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import {
-  CoreActions,
-  CoreActionTypes,
-  LoadEmail,
-  LoadEmailSuccess,
-  LoadEmailFail
-} from '../actions/core.actions';
+
 import { Observable, of } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import { EmailService } from '../../services/email.service';
@@ -17,28 +11,35 @@ import {
   LoadSearchResults,
   SearchActionTypes,
   LoadSearchResultsSuccess,
-  LoadSearchResultsFail
+  LoadSearchResultsFail,
+  ChangeSearchParticipantsParams
 } from '../actions/search.actions';
-import { ISearchResult } from '../../../shared/models/search';
+import { ISearchResult, IParticipant } from '../../../shared/models/search';
 import { IEmail } from '../../../shared/models/message';
 import { IListResult } from '../../../shared/models/listresult';
+import {
+  LoadParticipants,
+  ContextActionTypes,
+  LoadParticipantsSuccess,
+  LoadParticipantsFail
+} from '../actions/context.actions';
 
 @Injectable()
 export class CoreEffects {
   @Effect()
-  public loadEmail$: Observable<Action> = this.actions$.pipe(
-    ofType<LoadEmail>(CoreActionTypes.LoadEmail),
-    switchMap(({ payload }) => {
-      return this.emailService.getEmail(payload.id);
+  public changeQuery$: Observable<Action> = this.actions$.pipe(
+    ofType<ChangeSearchParticipantsParams>(SearchActionTypes.ChangeSearchParticipantsParams),
+    withLatestFrom(this.store),
+    switchMap(([action, state]) => {
+      const params = state.core.search.searchQuery;
+
+      return of(new LoadSearchResults({ page: 1, params }));
     }),
-    map((email: IEmail) => {
-      return new LoadEmailSuccess(email);
-    }),
-    catchError((err) => of(new LoadEmailFail(err)))
+    catchError((err) => of(new LoadSearchResultsFail(err)))
   );
 
   @Effect()
-  public loadSearchParams$: Observable<Action> = this.actions$.pipe(
+  public search$: Observable<Action> = this.actions$.pipe(
     ofType<LoadSearchResults>(SearchActionTypes.LoadSearchResults),
     withLatestFrom(this.store),
     switchMap(([action, state]) => {
@@ -49,6 +50,18 @@ export class CoreEffects {
       return new LoadSearchResultsSuccess(results);
     }),
     catchError((err) => of(new LoadSearchResultsFail(err)))
+  );
+
+  @Effect()
+  public participants$: Observable<Action> = this.actions$.pipe(
+    ofType<LoadParticipants>(ContextActionTypes.LoadParticipants),
+    switchMap((_action) => {
+      return this.emailService.getParticipants();
+    }),
+    map((results: IParticipant[]) => {
+      return new LoadParticipantsSuccess(results);
+    }),
+    catchError((err) => of(new LoadParticipantsFail(err)))
   );
 
   constructor(

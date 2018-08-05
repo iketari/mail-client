@@ -5,15 +5,13 @@ import {
   ActionReducerMap
 } from '@ngrx/store';
 
-import * as fromEmails from './emails.reducer';
+import * as fromContext from './context.reducer';
 import * as fromSearch from './search.reducer';
 import * as fromRoot from '../../../reducers';
-import { ISearchResult } from '../../../shared/models/search';
-import { IEmail } from '../../../shared/models/message';
 
 export interface CoreState {
-  emails: fromEmails.State;
   search: fromSearch.State;
+  context: fromContext.State;
 }
 
 export interface State extends fromRoot.State {
@@ -21,16 +19,24 @@ export interface State extends fromRoot.State {
 }
 
 export const reducers: ActionReducerMap<CoreState> = {
-  emails: fromEmails.reducer,
-  search: fromSearch.reducer
+  search: fromSearch.reducer,
+  context: fromContext.reducer
 };
 
 export const getCoreState = createFeatureSelector<CoreState>('core');
 
-// emails selectors
-// tode: remove unsed
-export const getEmailsState = createSelector(getCoreState, (state) => state.emails);
-export const getEmailsLoading = createSelector(getEmailsState, fromEmails.getLoading);
+// context selectors
+export const getContextEntitiesState = createSelector(getCoreState, (state) => state.context);
+export const getSelectedFromParticipant = createSelector(
+  getContextEntitiesState,
+  (state) => state.selected
+);
+
+export const {
+  selectIds: getParticipantsIds,
+  selectEntities: getParticipantsEntities,
+  selectAll: getAllParticipants
+} = fromContext.adapter.getSelectors(getContextEntitiesState);
 
 // search selectors
 export const getSearchResultsEntitiesState = createSelector(getCoreState, (state) => state.search);

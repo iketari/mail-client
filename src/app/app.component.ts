@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { FormGroup, FormControl } from '@angular/forms';
-
-import { LoadEmail } from './core/ngrx/actions/core.actions';
-import { map } from 'rxjs/operators';
 import { IEmail } from './shared/models/message';
 
 import * as fromRoot from './reducers';
 import * as fromCore from './core/ngrx/reducers';
 import { LoadSearchResults, SelectResult } from './core/ngrx/actions/search.actions';
-import { ISearchResult } from './shared/models/search';
+import { ISearchResult, IParticipant } from './shared/models/search';
+import { LoadParticipants } from './core/ngrx/actions/context.actions';
 
 @Component({
   selector: 'app-root',

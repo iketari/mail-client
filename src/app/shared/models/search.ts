@@ -17,3 +17,12 @@ export interface ISearchResult<T> {
 }
 
 export type THighlightRange = [number, number];
+
+export interface IParticipant {
+  id?: string;
+  email: string;
+  to: IParticipant[];
+  toEntities: {
+    [key: string]: IParticipant;
+  };
+}

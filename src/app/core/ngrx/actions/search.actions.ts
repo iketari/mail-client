@@ -1,13 +1,14 @@
 import { Action } from '@ngrx/store';
 import { IEmail } from '../../../shared/models/message';
 import { IListResult } from '../../../shared/models/listresult';
-import { ISearchQuery, ISearchResult } from '../../../shared/models/search';
+import { ISearchQuery, ISearchResult, IParticipant } from '../../../shared/models/search';
 
 export enum SearchActionTypes {
   LoadSearchResults = '[Search] Load Results',
   LoadSearchResultsSuccess = '[Search] Load Results Success',
   LoadSearchResultsFail = '[Search] Load Results Fail',
-  SelectSearchResult = '[Search] Select Result'
+  SelectSearchResult = '[Search] Select Result',
+  ChangeSearchParticipantsParams = '[Search] Change Params'
 }
 
 export class LoadSearchResults implements Action {
@@ -30,8 +31,14 @@ export class SelectResult implements Action {
   constructor(public payload: { id: string }) {}
 }
 
+export class ChangeSearchParticipantsParams implements Action {
+  readonly type = SearchActionTypes.ChangeSearchParticipantsParams;
+  constructor(public payload: { from?: IParticipant; to?: IParticipant[] }) {}
+}
+
 export type SearchActions =
   | LoadSearchResults
   | LoadSearchResultsSuccess
   | LoadSearchResultsFail
-  | SelectResult;
+  | SelectResult
+  | ChangeSearchParticipantsParams;

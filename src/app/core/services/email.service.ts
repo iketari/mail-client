@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { IListResult } from '../../shared/models/listresult';
 import md5 from 'blueimp-md5';
-import { ISearchQuery, ISearchResult } from '../../shared/models/search';
+import { ISearchQuery, ISearchResult, IParticipant } from '../../shared/models/search';
 import { until } from 'protractor';
 
 const MAX_DATE = new Date(8640000000000000);
@@ -32,28 +32,43 @@ export class EmailService {
   }
 
   /**
-   * Get all an email from the server side
+   * getParticipants
    */
-  public getEmail(id: string): Observable<IEmail> {
+  public getParticipants(): Observable<IParticipant[]> {
     return this.getEmails().pipe(
-      map((emails: IEmail[]) => emails.find((email: IEmail) => email.id === id))
-    );
-  }
+      map((emails: IEmail[]) => {
+        const temp: { [key: string]: IParticipant } = {};
 
-  /**
-   * Get paginated results
-   */
-  public getPaginatedEmails(page: number = 1, limit: number = 10): Observable<IListResult<IEmail>> {
-    const firstIndex = (page - 1) * limit;
-    const lastIndex = limit * page;
+        function getParticipant(email: string): IParticipant {
+          const id = md5(email);
+          return {
+            id,
+            email,
+            to: [],
+            toEntities: {}
+          };
+        }
 
-    return this.getEmails().pipe(
-      map((emails) => ({
-        page,
-        limit,
-        total: emails.length,
-        items: emails.slice(firstIndex, lastIndex)
-      }))
+        emails.forEach((email) => {
+          // create all participants
+          const fromParticipant = getParticipant(email.from);
+          if (!temp[fromParticipant.id]) {
+            temp[fromParticipant.id] = fromParticipant;
+          }
+
+          email.to.map((toEmail) => {
+            const toParticipant = getParticipant(toEmail);
+            const toParticipantId = toParticipant.id;
+
+            if (!fromParticipant.toEntities[toParticipantId]) {
+              fromParticipant.toEntities[toParticipantId] = toParticipant;
+              fromParticipant.to.push(toParticipant);
+            }
+          });
+        });
+
+        return Object.keys(temp).map((id) => temp[id]);
+      })
     );
   }
 
