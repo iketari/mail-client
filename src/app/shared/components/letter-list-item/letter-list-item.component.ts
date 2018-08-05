@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { IEmail } from '../../models/message';
+import { ISearchResult } from '../../models/search';
 
 @Component({
   selector: 'letter-list-item',
@@ -9,13 +10,13 @@ import { IEmail } from '../../models/message';
 })
 export class LetterListItemComponent {
   @Input()
-  message: IEmail;
+  message: ISearchResult<IEmail>;
 
   /**
    * getInitials
    */
   public getInitials(): string {
-    const { from } = this.message;
+    const { from } = this.message.originalItem;
     const parts = from.split(' ');
     let result = '';
 

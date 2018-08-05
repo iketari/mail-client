@@ -49,7 +49,7 @@ export class EmailService {
   }
 
   /**
-   * Get search resulst
+   * Get search results
    */
   public search(
     params: Partial<ISearchQuery>,
@@ -168,18 +168,18 @@ export class EmailService {
   }
 
   private performQueryString<T>(query: string, field: string, item: ISearchResult<T>): boolean {
-    const searchStr = query;
+    const searchStr = query.toLocaleLowerCase();
     let index = 0;
     let startIndex = 0;
-    let str = item.originalItem[field];
+    let str: string = item.originalItem[field];
 
-    while ((index = str.indexOf(searchStr, startIndex)) > -1) {
+    while ((index = str.toLocaleLowerCase().indexOf(searchStr, startIndex)) > -1) {
       startIndex = index + searchStr.length;
       item.highlights[field] = item.highlights[field] || [];
       item.highlights[field].push([index, startIndex]);
     }
 
-    return index !== -1;
+    return item.highlights[field] != null;
   }
 
   private _getBaseUrl() {

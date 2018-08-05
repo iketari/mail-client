@@ -1,6 +1,6 @@
 <a class="letter-list-item" href="#">
-  <span class="letter-list-item__avatar" [ngStyle]="{'background-color': stringToColour(message.from)}">{{getInitials()}}</span>
-  <span class="letter-list-item__name">{{message.from}}</span>
-  <span class="letter-list-item__subject">{{message.subject}}</span>
-  <span class="letter-list-item__date">{{message.date | date:'short'}}</span>
+  <span class="letter-list-item__avatar" [ngStyle]="{'background-color': stringToColour(message.originalItem.from)}">{{getInitials()}}</span>
+  <span class="letter-list-item__name">{{message.originalItem.from}}</span>
+  <span class="letter-list-item__subject">{{message.originalItem.subject}}</span>
+  <span class="letter-list-item__date">{{message.originalItem.date | date:'short'}}</span>
 </a>
