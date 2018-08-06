@@ -3,7 +3,7 @@
 		<a class="pure-menu-heading" href="/">Behavox</a>
 
 		<form class="header-right pure-form">
-				<input (change)="onSearchChange(search.value)" #search type="text" placeholder="Search" class="pure-input-rounded">
+				<input (change)="onSearchChange(search.value)" #search type="search" placeholder="Search" class="pure-input-rounded">
 		</form>
 	</div>
 </div>
@@ -28,31 +28,3 @@
 		<letter-preview *ngIf="selectedEmail" [message]="selectedEmail"></letter-preview>
 	</div>
 </div>
-
-<!-- <form (ngSubmit)="onSubmit()" [formGroup]="searchForm">
-    <fieldset>
-        <label for="date_from">Date from</label>
-        <input id="date_from" type="date" formControlName="date_from"/>
-        <label for="date_to">Date to</label>
-        <input id="date_to" type="date" formControlName="date_to"/>
-        <br>
-        <label for="from">From</label>
-        <input id="from" type="text" formControlName="from" />
-        <label for="to">To</label>
-        <input id="to" type="text" formControlName="to"/>
-        <br>
-        <label for="search">Search</label>
-        <input id="search" type="text" formControlName="query" />
-        <br>
-        <input type="submit" value="search">
-    </fieldset>
-</form>
-
-
-<div class="messages-list">
-    <letter-list-item [message]="result" *ngFor="let result of results | paginate: { id: 'emails', itemsPerPage: 10, currentPage: eamilsPage, totalItems: emailsTotal }"></letter-list-item>
-</div>
-<div class="pagination">
-    <div class="spinner" [ngClass]="{ 'hidden': !eamilsLoading }"></div>
-    <pagination-controls (pageChange)="onPaginationChange($event)" id="emails"></pagination-controls>
-</div> -->

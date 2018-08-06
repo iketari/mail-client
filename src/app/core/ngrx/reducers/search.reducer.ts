@@ -104,6 +104,20 @@ export function reducer(state = initialState, action: SearchActions): State {
         }
       };
 
+    case SearchActionTypes.ChangeSearchDatesParams:
+      const { date_from, date_to } = action.payload;
+      
+      return {
+        ...state,
+        loading: true,
+        searchQuery: {
+          ...state.searchQuery,
+          date_from,
+          date_to
+        }
+      };
+
+
     default:
       return state;
   }

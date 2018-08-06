@@ -2,23 +2,27 @@
   <a href="#" class="nav-menu-button">Menu</a>
 
   <div class="nav-inner">
+      <form class="pure-form">
       <div class="pure-menu">
           <ul class="pure-menu-list">
-              <li class="pure-menu-heading">Participants</li>
-              <li class="pure-menu-item"><span class="pure-menu-link pure-menu-link-pseudo">From</span></li>
-              <li class="pure-menu-item pure-menu-item-select">
-                  <ng-select (change)="onFromChange($event)" [items]="participants" bindValue="id" bindLabel="email"></ng-select>
-              </li>
-              
-              <li class="pure-menu-item"><span class="pure-menu-link pure-menu-link-pseudo">To</span></li>
-              <li class="pure-menu-item pure-menu-item-select">
-                  <ng-select (change)="onToChange($event)" [multiple]="true" [items]="selectedFrom?.to" bindValue="id" bindLabel="email"></ng-select>
-              </li>
-
-              <li class="pure-menu-heading">Dates</li>
-              <li class="pure-menu-item"><a href="#" class="pure-menu-link">From</a></li>
-              <li class="pure-menu-item"><a href="#" class="pure-menu-link">To</a></li>
+            <li class="pure-menu-heading">Participants</li>
+            <li class="pure-menu-item"><span class="pure-menu-link pure-menu-link-pseudo">From</span></li>
+            <li class="pure-menu-item pure-menu-item-select">
+                <ng-select (change)="onFromChange($event)" [items]="participants" bindValue="id" bindLabel="email"></ng-select>
+            </li>
+            
+            <li class="pure-menu-item"><span class="pure-menu-link pure-menu-link-pseudo">To</span></li>
+            <li class="pure-menu-item pure-menu-item-select">
+                <ng-select (change)="onToChange($event)" [multiple]="true" [items]="selectedFrom?.to" bindValue="id" bindLabel="email"></ng-select>
+            </li>
+  
+            <li class="pure-menu-heading">Dates</li>
+            <li class="pure-menu-item"><span class="pure-menu-link pure-menu-link-pseudo">From</span></li>
+            <li class="pure-menu-item pure-menu-item-select"><input (change)="onDateFromChange(dateFrom.value)" #dateFrom class="pure-menu-input" type="date" value=""></li>
+            <li class="pure-menu-item"><span class="pure-menu-link pure-menu-link-pseudo">To</span></li>
+            <li class="pure-menu-item pure-menu-item-select"><input (change)="onDateToChange(dateTo.value)" #dateTo class="pure-menu-input" type="date" value=""></li>
           </ul>
       </div>
+      </form>
   </div>
 </div>

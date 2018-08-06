@@ -4,7 +4,7 @@ import { Store, select } from '@ngrx/store';
 import * as fromCore from './../../ngrx/reducers';
 import { IParticipant } from '../../../shared/models/search';
 import { LoadParticipants } from '../../ngrx/actions/context.actions';
-import { ChangeSearchParticipantsParams } from '../../ngrx/actions/search.actions';
+import { ChangeSearchParticipantsParams, ChangeSearchDatesParams } from '../../ngrx/actions/search.actions';
 
 @Component({
   selector: 'sidebar',
@@ -47,6 +47,28 @@ export class SidebarComponent implements OnInit {
     this.store.dispatch(
       new ChangeSearchParticipantsParams({
         to
+      })
+    );
+  }
+  
+  /**
+   * handler on "from date" input change
+   */
+  public onDateFromChange(value: string) {
+    this.store.dispatch(
+      new ChangeSearchDatesParams({
+        date_from: value ? new Date(value) : null
+      })
+    );
+  }
+
+  /**
+   * handler on "to date" input change
+   */
+  public onDateToChange(value: string) {
+    this.store.dispatch(
+      new ChangeSearchDatesParams({
+        date_to: value ? new Date(value) : null
       })
     );
   }

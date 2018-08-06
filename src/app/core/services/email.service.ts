@@ -51,10 +51,12 @@ export class EmailService {
 
         emails.forEach((email) => {
           // create all participants
-          const fromParticipant = getParticipant(email.from);
-          if (!temp[fromParticipant.id]) {
-            temp[fromParticipant.id] = fromParticipant;
+          let fromParticipant = getParticipant(email.from);
+          const fromParticipantId = fromParticipant.id;
+          if (!temp[fromParticipantId]) {
+            temp[fromParticipantId] = fromParticipant;
           }
+          fromParticipant = temp[fromParticipantId];
 
           email.to.map((toEmail) => {
             const toParticipant = getParticipant(toEmail);
@@ -144,12 +146,12 @@ export class EmailService {
     params: Partial<ISearchQuery>
   ): (value: ISearchResult<T>[]) => ISearchResult<T>[] {
     return (itemsToFilter = []) => {
-      if (!params.to) {
+      if (!params.to || params.to.length === 0) {
         return itemsToFilter;
       }
 
       return itemsToFilter.filter((item) => {
-        if (item.originalItem.to.filter((value) => -1 !== params.to.indexOf(value))) {
+        if (item.originalItem.to.find((value) => -1 !== params.to.indexOf(value))) {
           item.filteredBy['to'] = true;
           return true;
         }
