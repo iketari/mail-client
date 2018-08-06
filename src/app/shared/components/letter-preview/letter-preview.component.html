@@ -4,7 +4,7 @@
           <letter-avatar class="email-avatar-large" [name]="message.originalItem.from"></letter-avatar>
         </div>
         <div class="pure-u-1-2">
-          <h1 class="email-content-title">{{message.originalItem.subject}}</h1>
+          <h1 class="email-content-title" [innerHTML]="message.originalItem.subject | highlight: message.highlights.subject"></h1>
           <p class="email-content-subtitle">
               From: <a>{{message.originalItem.from}}</a>
               <br>
@@ -15,7 +15,5 @@
         </div>
     </div>
 
-    <div class="email-content-body">
-        {{message.originalItem.body}}
-    </div>
+    <div class="email-content-body" [innerHTML]="message.originalItem.body | highlight: message.highlights.body"></div>
 </div>

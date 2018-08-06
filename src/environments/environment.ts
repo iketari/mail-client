@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  emailServiceUrl: 'http://localhost:3000',
-  emailsPath: 'emails'
+  emailServiceUrl: 'https://artsiom.mezin.eu/mail-client/assets',
+  emailsPath: 'emails.json'
 };
 
 /*
