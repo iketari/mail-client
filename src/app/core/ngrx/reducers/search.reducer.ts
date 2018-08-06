@@ -91,6 +91,18 @@ export function reducer(state = initialState, action: SearchActions): State {
           to: newTo
         }
       };
+      
+    case SearchActionTypes.ChangeSearchTextQuery:
+      const { query } = action.payload;
+      
+      return {
+        ...state,
+        loading: true,
+        searchQuery: {
+          ...state.searchQuery,
+          query
+        }
+      };
 
     default:
       return state;

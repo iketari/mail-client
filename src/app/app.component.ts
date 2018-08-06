@@ -5,7 +5,7 @@ import { IEmail } from './shared/models/message';
 
 import * as fromRoot from './reducers';
 import * as fromCore from './core/ngrx/reducers';
-import { LoadSearchResults, SelectResult } from './core/ngrx/actions/search.actions';
+import { LoadSearchResults, SelectResult, ChangeSearchTextQuery } from './core/ngrx/actions/search.actions';
 import { ISearchResult, IParticipant } from './shared/models/search';
 import { LoadParticipants } from './core/ngrx/actions/context.actions';
 
@@ -21,14 +21,6 @@ export class AppComponent implements OnInit {
   public eamilsLimit: number;
   public eamilsLoading: boolean;
   public eamilsPage: number;
-
-  public searchForm = new FormGroup({
-    date_from: new FormControl(''),
-    date_to: new FormControl(''),
-    query: new FormControl(''),
-    from: new FormControl(''),
-    to: new FormControl('')
-  });
 
   constructor(private store: Store<fromRoot.State>) {}
 
@@ -73,16 +65,8 @@ export class AppComponent implements OnInit {
     this.store.dispatch(new LoadSearchResults({ page, params: {} }));
   }
 
-  public onSubmit() {
-    const { value } = this.searchForm;
-    const params = {
-      ...value,
-      date_from: value.date_from ? new Date(value.date_from) : null,
-      date_to: value.date_to ? new Date(value.date_to) : null,
-      to: [value.to.split(',')]
-    };
-
-    this.store.dispatch(new LoadSearchResults({ page: this.eamilsPage, params }));
+  public onSearchChange(query: string) {
+    this.store.dispatch(new ChangeSearchTextQuery({ query }));
   }
 
   public getInitials(): string {

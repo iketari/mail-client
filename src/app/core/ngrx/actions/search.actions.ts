@@ -8,7 +8,8 @@ export enum SearchActionTypes {
   LoadSearchResultsSuccess = '[Search] Load Results Success',
   LoadSearchResultsFail = '[Search] Load Results Fail',
   SelectSearchResult = '[Search] Select Result',
-  ChangeSearchParticipantsParams = '[Search] Change Params'
+  ChangeSearchParticipantsParams = '[Search] Change Params',
+  ChangeSearchTextQuery = '[Search] Change Search Text Query'
 }
 
 export class LoadSearchResults implements Action {
@@ -36,9 +37,15 @@ export class ChangeSearchParticipantsParams implements Action {
   constructor(public payload: { from?: IParticipant; to?: IParticipant[] }) {}
 }
 
+export class ChangeSearchTextQuery implements Action {
+  readonly type = SearchActionTypes.ChangeSearchTextQuery;
+  constructor(public payload: { query: string }) {}
+}
+
 export type SearchActions =
   | LoadSearchResults
   | LoadSearchResultsSuccess
   | LoadSearchResultsFail
   | SelectResult
-  | ChangeSearchParticipantsParams;
+  | ChangeSearchParticipantsParams
+  | ChangeSearchTextQuery;

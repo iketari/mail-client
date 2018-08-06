@@ -8,9 +8,9 @@
           <p class="email-content-subtitle">
               From: <a>{{message.originalItem.from}}</a>
               <br>
-              To: <span><a *ngFor="let to of message.originalItem.to">{{to}}</a></span>  
+              To: <ng-container *ngFor="let to of message.originalItem.to"><a>{{to}}</a><br></ng-container>  
               <br>
-              at <span>{{message.originalItem.date | date:'full'}}</span>
+              At: <span>{{message.originalItem.date | date:'medium'}}</span>
           </p>
         </div>
     </div>

@@ -3,7 +3,7 @@
 		<a class="pure-menu-heading" href="/">Behavox</a>
 
 		<form class="header-right pure-form">
-				<input type="text" placeholder="Search" class="pure-input-rounded">
+				<input (change)="onSearchChange(search.value)" #search type="text" placeholder="Search" class="pure-input-rounded">
 		</form>
 	</div>
 </div>

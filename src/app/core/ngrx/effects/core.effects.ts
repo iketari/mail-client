@@ -12,7 +12,8 @@ import {
   SearchActionTypes,
   LoadSearchResultsSuccess,
   LoadSearchResultsFail,
-  ChangeSearchParticipantsParams
+  ChangeSearchParticipantsParams,
+  ChangeSearchTextQuery
 } from '../actions/search.actions';
 import { ISearchResult, IParticipant } from '../../../shared/models/search';
 import { IEmail } from '../../../shared/models/message';
@@ -28,7 +29,10 @@ import {
 export class CoreEffects {
   @Effect()
   public changeQuery$: Observable<Action> = this.actions$.pipe(
-    ofType<ChangeSearchParticipantsParams>(SearchActionTypes.ChangeSearchParticipantsParams),
+    ofType<ChangeSearchParticipantsParams | ChangeSearchTextQuery>(
+      SearchActionTypes.ChangeSearchParticipantsParams,
+      SearchActionTypes.ChangeSearchTextQuery
+    ),
     withLatestFrom(this.store),
     switchMap(([action, state]) => {
       const params = state.core.search.searchQuery;
@@ -43,8 +47,10 @@ export class CoreEffects {
     ofType<LoadSearchResults>(SearchActionTypes.LoadSearchResults),
     withLatestFrom(this.store),
     switchMap(([action, state]) => {
-      const { params, page } = action.payload;
-      return this.emailService.search(params || {}, page, state.core.search.limit);
+      const { page } = action.payload;
+      const params = state.core.search.searchQuery;
+      
+      return this.emailService.search(params, page, state.core.search.limit);
     }),
     map((results: IListResult<ISearchResult<IEmail>>) => {
       return new LoadSearchResultsSuccess(results);
