@@ -1,5 +1,6 @@
 /* Email Item Styles */
 .email-item {
+    position: relative;
     padding: 0.9em 1em;
     border-bottom: 1px solid #ddd;
     border-left: 6px solid transparent;
@@ -20,6 +21,15 @@
     .email-desc {
         font-size: 80%;
         margin: 0.4em 0;
+    }
+
+    .email-counter {
+        padding: 0.5em 0.8em;
+        background: #ccc;
+        border-radius: 0.5em;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
     }
 
 .email-item-selected {

@@ -1,13 +1,6 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  ChangeDetectionStrategy,
-  Output,
-  EventEmitter
-} from '@angular/core';
-import { ISearchResult } from '../../../shared/models/search';
-import { IEmail } from '../../../shared/models/message';
+import { Component, Input, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
+import { IThreadSearchResult } from '../../models/search';
+import { IEmail } from '../../models/message';
 
 @Component({
   selector: 'letter-list-item',
@@ -17,18 +10,18 @@ import { IEmail } from '../../../shared/models/message';
 })
 export class LetterListItemComponent {
   @Input()
-  message: ISearchResult<IEmail>;
+  thread: IThreadSearchResult<IEmail>;
 
   @Input()
   selected: boolean;
 
   @Output()
-  select = new EventEmitter<ISearchResult<IEmail>>();
+  select = new EventEmitter<IThreadSearchResult<IEmail>>();
 
   /**
    * onItemClick
    */
   public onItemClick() {
-    this.select.emit(this.message);
+    this.select.emit(this.thread);
   }
 }

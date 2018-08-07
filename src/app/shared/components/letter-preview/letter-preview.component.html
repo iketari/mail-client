@@ -4,16 +4,18 @@
           <letter-avatar class="email-avatar-large" [name]="message.originalItem.from"></letter-avatar>
         </div>
         <div class="pure-u-1-2">
-          <h1 class="email-content-title" [innerHTML]="message.originalItem.subject | highlight: message.highlights.subject"></h1>
+          <h1 class="email-content-title">{{message.originalItem.subject}}</h1>
           <p class="email-content-subtitle">
               From: <a>{{message.originalItem.from}}</a>
               <br>
-              To: <ng-container *ngFor="let to of message.originalItem.to"><a>{{to}}</a><br></ng-container>  
+              To: <span><a *ngFor="let to of message.originalItem.to">{{to}}</a></span>  
               <br>
-              At: <span>{{message.originalItem.date | date:'medium'}}</span>
+              at <span>{{message.originalItem.date | date:'full'}}</span>
           </p>
         </div>
     </div>
 
-    <div class="email-content-body" [innerHTML]="message.originalItem.body | highlight: message.highlights.body"></div>
+    <div class="email-content-body">
+        {{message.originalItem.body}}
+    </div>
 </div>

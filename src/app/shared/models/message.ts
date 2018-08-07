@@ -9,8 +9,8 @@ export interface IEmail {
   id?: string;
 }
 
-export interface IThread {
-  messages: IEmail[];
+export interface IThread<T> {
+  messages: T[];
   subject: string;
   participants: string[];
   id: string;

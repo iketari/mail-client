@@ -10,12 +10,15 @@ import {
   ISearchQuery,
   ISearchResult,
   ISearchResponse,
-  IParticipant
+  IParticipant,
+  IThreadSearchResult
 } from '../../shared/models/search';
 import { until } from 'protractor';
 
 const MAX_DATE = new Date(8640000000000000);
 const MIN_DATE = new Date(-8640000000000000);
+
+const THREAD_SUBJECT_RE = /(RE|FW):\s/;
 
 @Injectable()
 export class EmailService {
@@ -36,26 +39,25 @@ export class EmailService {
     );
   }
 
-  /**
-   * Get search results
-   */
-  public search(
-    params: ISearchQuery,
-    page: number = 1,
-    limit: number = 10
-  ): Observable<ISearchResponse<IEmail>> {
-    const source: Observable<ISearchResult<IEmail>[]> = this.getEmails().pipe(
-      map(this.convertToResults<IEmail>()),
-      map(this.filterByFrom<IEmail>(params)),
-      map(this.filterByTo<IEmail>(params)),
-      map(this.filterByDate<IEmail>(params)),
-      map(this.filterByQuery<IEmail>(params))
-    );
+  // /**
+  //  * Get search results
+  //  */
+  // public search(
+  //   params: ISearchQuery,
+  //   page: number = 1,
+  //   limit: number = 10
+  // ): Observable<ISearchResponse<IEmail>> {
+  //   const source: Observable<ISearchResult<IEmail>[]> = this.getEmails().pipe(
+  //     map(this.convertToResults<IEmail>()),
+  //     map(this.filterByFrom<IEmail>(params)),
+  //     map(this.filterByTo<IEmail>(params)),
+  //     map(this.filterByDate<IEmail>(params)),
+  //     map(this.filterByQuery<IEmail>(params))
+  //   );
 
-    return this.getPaginatedSearchResults(source, params, page, limit);
-  }
-  
-  
+  //   return this.getPaginatedSearchResults(source, params, page, limit);
+  // }
+
   /**
    * Get search results
    */
@@ -63,22 +65,22 @@ export class EmailService {
     params: ISearchQuery,
     page: number = 1,
     limit: number = 10
-  ): Observable<IThread[]> {
+  ): Observable<ISearchResponse<IEmail>> {
     const source = this.getEmails().pipe(
-      map(this.groupToThreads<IEmail>()),
+      map(this.groupToThreads()),
+      map(this.convertToResults<IEmail>())
       // map(this.filterByFrom<IEmail>(params)),
     );
 
     return this.getPaginatedSearchResults(source, params, page, limit);
   }
 
-
-  private getPaginatedSearchResults(
-    source: Observable<ISearchResult<IEmail>[]>,
+  private getPaginatedSearchResults<T extends IEmail>(
+    source: Observable<IThreadSearchResult<T>[]>,
     context: ISearchQuery,
     page: number = 1,
     limit: number = 10
-  ): Observable<ISearchResponse<IEmail>> {
+  ): Observable<ISearchResponse<T>> {
     const firstIndex = (page - 1) * limit;
     const lastIndex = limit * page;
 
@@ -89,15 +91,13 @@ export class EmailService {
         context,
         total: results.length,
         items: results.slice(firstIndex, lastIndex),
-        participants: this.extractParticipants(
-          results.map((sourceResult: ISearchResult<IEmail>) => sourceResult.originalItem)
-        )
+        participants: this.extractParticipants<IEmail>(results)
       }))
     );
   }
 
-  private extractParticipants(threads: IThread[]): IParticipant[] {
-    const temp: Map<string, IParticipant> = new Map;
+  private extractParticipants<T extends IEmail>(threads: IThread<T>[]): IParticipant[] {
+    const temp: Map<string, IParticipant> = new Map();
 
     function getParticipant(address: string): IParticipant {
       const id = md5(address);
@@ -108,17 +108,17 @@ export class EmailService {
         toEntities: {}
       };
     }
-    
-    function performEmail(email: IEmail) {
+
+    function performMessage(message: T) {
       // create all participants
-      let fromParticipant = getParticipant(email.from);
+      let fromParticipant = getParticipant(message.from);
       const fromParticipantId = fromParticipant.id;
       if (!temp.has(fromParticipantId)) {
         temp.set(fromParticipantId, fromParticipant);
       }
       fromParticipant = temp.get(fromParticipantId);
 
-      email.to.map((toEmail) => {
+      message.to.map((toEmail) => {
         const toParticipant = getParticipant(toEmail);
         const toParticipantId = toParticipant.id;
 
@@ -127,48 +127,54 @@ export class EmailService {
           fromParticipant.to.push(toParticipant);
         }
       });
-    };
-  
+    }
+
     threads.forEach((thread) => {
-      thread.emails.forEach(performEmail);
+      thread.messages.forEach(performMessage);
     });
 
     return Array.from(temp.values());
   }
 
-  private groupToThreads<T extends IEmail>(): (value: T[]) => IThread[] {
-    return (messages: T[]) => {
-      const threadsMap: Map<string, IThread> = new Map();
+  private groupToThreads<T extends IEmail>(): (value: T[]) => IThread<T>[] {
+    return (messages: T[]): IThread<T>[] => {
+      const threadsMap: Map<string, IThread<T>> = new Map();
 
-      messages.forEach<IThread>((message: IEmail) => {
-        const threadSubject = message.subject.replace(/(RE|FW):\s/, '');
+      messages.forEach((message: T) => {
+        const threadSubject = message.subject.replace(THREAD_SUBJECT_RE, '');
         const threadParticipants = [message.from, ...message.to];
         const threadId = md5(threadSubject + threadParticipants);
-        
+
         if (!threadsMap.has(threadId)) {
           threadsMap.set(threadId, {
             id: threadId,
             messages: [message],
             subject: threadSubject,
             participants: threadParticipants
-          });
+          } as IThread<T>);
         } else {
           threadsMap.get(threadId).messages.push(message);
         }
-        
-      };
-      
+      });
+
       return Array.from(threadsMap.values());
     };
   }
 
-  private convertToResults<T extends IEmail>(): (value: T[]) => ISearchResult<T>[] {
-    return (originalItems: T[]) => {
-      return originalItems.map<ISearchResult<T>>((originalItem) => ({
-        originalItem,
-        highlights: {},
-        filteredBy: {}
-      }));
+  private convertToResults<T extends IEmail>(): (value: IThread<T>[]) => IThreadSearchResult<T>[] {
+    return (originalThreads: IThread<T>[]): IThreadSearchResult<T>[] => {
+      return originalThreads.map<IThreadSearchResult<T>>(
+        (originalThread: IThread<T>) =>
+          ({
+            ...originalThread,
+            performedMessages: originalThread.messages.map<ISearchResult<T>>((originalItem: T) => ({
+              originalItem,
+              filteredBy: {},
+              highlights: {}
+            })),
+            highlights: {}
+          } as IThreadSearchResult<T>)
+      );
     };
   }
 
