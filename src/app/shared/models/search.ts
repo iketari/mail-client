@@ -1,3 +1,5 @@
+import { IListResult } from './listresult';
+
 export interface ISearchQuery {
   date_from: Date;
   date_to: Date;
@@ -14,6 +16,15 @@ export interface ISearchResult<T> {
   highlights: {
     [field: string]: THighlightRange[];
   };
+}
+
+export interface ISearchResponse<T> extends IListResult<ISearchResult<T>> {
+  items: ISearchResult<T>;
+  page: number;
+  limit: number;
+  total: number;
+  context: ISearchQuery;
+  participants: IParticipant[];
 }
 
 export type THighlightRange = [number, number];

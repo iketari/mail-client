@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 
-import { Observable, of } from 'rxjs';
+import { Observable, of, from } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import { EmailService } from '../../services/email.service';
 import { switchMap, map, catchError, withLatestFrom } from 'rxjs/operators';
@@ -16,7 +16,7 @@ import {
   ChangeSearchTextQuery,
   ChangeSearchDatesParams
 } from '../actions/search.actions';
-import { ISearchResult, IParticipant } from '../../../shared/models/search';
+import { ISearchResponse, IParticipant } from '../../../shared/models/search';
 import { IEmail } from '../../../shared/models/message';
 import { IListResult } from '../../../shared/models/listresult';
 import {
@@ -51,25 +51,16 @@ export class CoreEffects {
     switchMap(([action, state]) => {
       const { page } = action.payload;
       const params = state.core.search.searchQuery;
-      
+
       return this.emailService.search(params, page, state.core.search.limit);
     }),
-    map((results: IListResult<ISearchResult<IEmail>>) => {
-      return new LoadSearchResultsSuccess(results);
+    switchMap((results: ISearchResponse<IEmail>) => {
+      return from([
+        new LoadSearchResultsSuccess(results),
+        new LoadParticipantsSuccess(results.participants)
+      ]);
     }),
     catchError((err) => of(new LoadSearchResultsFail(err)))
-  );
-
-  @Effect()
-  public participants$: Observable<Action> = this.actions$.pipe(
-    ofType<LoadParticipants>(ContextActionTypes.LoadParticipants),
-    switchMap((_action) => {
-      return this.emailService.getParticipants();
-    }),
-    map((results: IParticipant[]) => {
-      return new LoadParticipantsSuccess(results);
-    }),
-    catchError((err) => of(new LoadParticipantsFail(err)))
   );
 
   constructor(

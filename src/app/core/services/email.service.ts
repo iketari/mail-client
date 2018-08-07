@@ -6,7 +6,12 @@ import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { IListResult } from '../../shared/models/listresult';
 import md5 from 'blueimp-md5';
-import { ISearchQuery, ISearchResult, IParticipant } from '../../shared/models/search';
+import {
+  ISearchQuery,
+  ISearchResult,
+  ISearchResponse,
+  IParticipant
+} from '../../shared/models/search';
 import { until } from 'protractor';
 
 const MAX_DATE = new Date(8640000000000000);
@@ -32,72 +37,30 @@ export class EmailService {
   }
 
   /**
-   * getParticipants
-   */
-  public getParticipants(): Observable<IParticipant[]> {
-    return this.getEmails().pipe(
-      map((emails: IEmail[]) => {
-        const temp: { [key: string]: IParticipant } = {};
-
-        function getParticipant(email: string): IParticipant {
-          const id = md5(email);
-          return {
-            id,
-            email,
-            to: [],
-            toEntities: {}
-          };
-        }
-
-        emails.forEach((email) => {
-          // create all participants
-          let fromParticipant = getParticipant(email.from);
-          const fromParticipantId = fromParticipant.id;
-          if (!temp[fromParticipantId]) {
-            temp[fromParticipantId] = fromParticipant;
-          }
-          fromParticipant = temp[fromParticipantId];
-
-          email.to.map((toEmail) => {
-            const toParticipant = getParticipant(toEmail);
-            const toParticipantId = toParticipant.id;
-
-            if (!fromParticipant.toEntities[toParticipantId]) {
-              fromParticipant.toEntities[toParticipantId] = toParticipant;
-              fromParticipant.to.push(toParticipant);
-            }
-          });
-        });
-
-        return Object.keys(temp).map((id) => temp[id]);
-      })
-    );
-  }
-
-  /**
    * Get search results
    */
   public search(
-    params: Partial<ISearchQuery>,
+    params: ISearchQuery,
     page: number = 1,
     limit: number = 10
-  ): Observable<IListResult<ISearchResult<IEmail>>> {
-    const source = this.getEmails().pipe(
-      map(this.covertToResults()),
+  ): Observable<ISearchResponse<IEmail>> {
+    const source: ISearchResult<IEmail>[] = this.getEmails().pipe(
+      map(this.convertToResults<IEmail>()),
       map(this.filterByFrom<IEmail>(params)),
       map(this.filterByTo<IEmail>(params)),
       map(this.filterByDate<IEmail>(params)),
       map(this.filterByQuery<IEmail>(params))
     );
 
-    return this.getPaginatedSearchResults<ISearchResult<IEmail>>(source, page, limit);
+    return this.getPaginatedSearchResults(source, params, page, limit);
   }
 
-  private getPaginatedSearchResults<T>(
-    source: Observable<T[]>,
+  private getPaginatedSearchResults(
+    source: Observable<ISearchResult<IEmail>[]>,
+    context: ISearchQuery,
     page: number = 1,
     limit: number = 10
-  ): Observable<IListResult<T>> {
+  ): Observable<ISearchResponse<IEmail>> {
     const firstIndex = (page - 1) * limit;
     const lastIndex = limit * page;
 
@@ -105,13 +68,53 @@ export class EmailService {
       map((results) => ({
         page,
         limit,
+        context,
         total: results.length,
-        items: results.slice(firstIndex, lastIndex)
+        items: results.slice(firstIndex, lastIndex),
+        participants: this.extractParticipants(
+          results.map((sourceResult: ISearchResult<IEmail>) => sourceResult.originalItem)
+        )
       }))
     );
   }
 
-  private covertToResults<T extends IEmail>(): (value: T[]) => ISearchResult<T>[] {
+  private extractParticipants(emails: IEmail[]): IParticipant[] {
+    const temp: { [key: string]: IParticipant } = {};
+
+    function getParticipant(address: string): IParticipant {
+      const id = md5(address);
+      return {
+        id,
+        email: address,
+        to: [],
+        toEntities: {}
+      };
+    }
+
+    emails.forEach((email) => {
+      // create all participants
+      let fromParticipant = getParticipant(email.from);
+      const fromParticipantId = fromParticipant.id;
+      if (!temp[fromParticipantId]) {
+        temp[fromParticipantId] = fromParticipant;
+      }
+      fromParticipant = temp[fromParticipantId];
+
+      email.to.map((toEmail) => {
+        const toParticipant = getParticipant(toEmail);
+        const toParticipantId = toParticipant.id;
+
+        if (!fromParticipant.toEntities[toParticipantId]) {
+          fromParticipant.toEntities[toParticipantId] = toParticipant;
+          fromParticipant.to.push(toParticipant);
+        }
+      });
+    });
+
+    return Object.keys(temp).map((id) => temp[id]);
+  }
+
+  private convertToResults<T extends IEmail>(): (value: T[]) => ISearchResult<T>[] {
     return (originalItems: T[]) => {
       return originalItems.map<ISearchResult<T>>((originalItem) => ({
         originalItem,

@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 import { IEmail } from '../../../shared/models/message';
 import { IListResult } from '../../../shared/models/listresult';
-import { ISearchQuery, ISearchResult, IParticipant } from '../../../shared/models/search';
+import { ISearchQuery, ISearchResponse, IParticipant } from '../../../shared/models/search';
 
 export enum SearchActionTypes {
   LoadSearchResults = '[Search] Load Results',
@@ -20,7 +20,7 @@ export class LoadSearchResults implements Action {
 
 export class LoadSearchResultsSuccess implements Action {
   readonly type = SearchActionTypes.LoadSearchResultsSuccess;
-  constructor(public payload: IListResult<ISearchResult<IEmail>>) {}
+  constructor(public payload: ISearchResponse<IEmail>) {}
 }
 
 export class LoadSearchResultsFail implements Action {
