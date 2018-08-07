@@ -1,11 +1,17 @@
 <div (click)="onItemClick()" class="email-item pure-g" [ngClass]="{'email-item-selected': selected}">
-    <div class="pure-u">
-        <letter-avatar [name]="message.originalItem.from"></letter-avatar>
-    </div>
+	<div class="pure-u-1-4">
+		<letter-avatar [name]="thread.messages[0].from"></letter-avatar>
+	</div>
 
-    <div class="pure-u-3-4">
-        <h5 class="email-name">{{message.originalItem.from}}</h5>
-        <h4 class="email-subject">{{message.originalItem.subject || '&nbsp;'}}</h4>
-        <h6 class="email-date">{{message.originalItem.date | date:'short'}}</h6>
-    </div>
+	<div class="pure-u-5-8">
+		<h5 class="email-name">{{thread.messages[0].from}}</h5>
+		<h4 class="email-subject">{{thread.subject || '&nbsp;'}}</h4>
+		<h6 class="email-date">{{thread.messages[0].date | date:'short'}}</h6>
+	</div>
+
+	<div class="pure-u">
+		<div class="email-counter">
+			{{ thread.messages.length }}
+		</div>
+	</div>
 </div>

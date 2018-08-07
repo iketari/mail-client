@@ -5,8 +5,12 @@ import { IEmail } from './shared/models/message';
 
 import * as fromRoot from './reducers';
 import * as fromCore from './core/ngrx/reducers';
-import { LoadSearchResults, SelectResult, ChangeSearchTextQuery } from './core/ngrx/actions/search.actions';
-import { ISearchResult, IParticipant } from './shared/models/search';
+import {
+  LoadSearchResults,
+  SelectResult,
+  ChangeSearchTextQuery
+} from './core/ngrx/actions/search.actions';
+import { IThreadSearchResult, IParticipant } from './shared/models/search';
 import { LoadParticipants } from './core/ngrx/actions/context.actions';
 
 @Component({
@@ -15,8 +19,8 @@ import { LoadParticipants } from './core/ngrx/actions/context.actions';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public results: ISearchResult<IEmail>[];
-  public selectedEmail: ISearchResult<IEmail>;
+  public results: IThreadSearchResult<IEmail>[];
+  public selectedThread: IThreadSearchResult<IEmail>;
   public emailsTotal: number;
   public eamilsLimit: number;
   public eamilsLoading: boolean;
@@ -47,7 +51,7 @@ export class AppComponent implements OnInit {
 
     this.store
       .pipe(select(fromCore.getSelectedResult))
-      .subscribe((selected) => (this.selectedEmail = selected));
+      .subscribe((selected) => (this.selectedThread = selected));
 
     this.store.dispatch(
       new LoadSearchResults({
@@ -57,8 +61,8 @@ export class AppComponent implements OnInit {
     );
   }
 
-  public onItemSelect(item: ISearchResult<IEmail>) {
-    this.store.dispatch(new SelectResult({ id: item.originalItem.id }));
+  public onItemSelect(item: IThreadSearchResult<IEmail>) {
+    this.store.dispatch(new SelectResult({ id: item.id }));
   }
 
   public onPaginationChange(page: number) {
@@ -67,32 +71,5 @@ export class AppComponent implements OnInit {
 
   public onSearchChange(query: string) {
     this.store.dispatch(new ChangeSearchTextQuery({ query }));
-  }
-
-  public getInitials(): string {
-    const { from } = this.selectedEmail.originalItem;
-    const parts = from.split(' ');
-    let result = '';
-
-    if (parts[0] && parts[1]) {
-      result = parts[0].charAt(0) + parts[1].charAt(0);
-    } else {
-      result = from.slice(0, 2);
-    }
-
-    return result;
-  }
-
-  public stringToColour(str: string): string {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    let colour = '#';
-    for (let i = 0; i < 3; i++) {
-      const value = (hash >> (i * 8)) & 0xff;
-      colour += ('00' + value.toString(16)).substr(-2);
-    }
-    return colour;
   }
 }

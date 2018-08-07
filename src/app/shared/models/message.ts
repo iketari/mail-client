@@ -8,3 +8,10 @@ export interface IEmail {
   date: Date;
   id?: string;
 }
+
+export interface IThread<T> {
+  messages: T[];
+  subject: string;
+  participants: string[];
+  id: string;
+}

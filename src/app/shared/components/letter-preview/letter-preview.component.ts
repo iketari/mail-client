@@ -11,4 +11,13 @@ import { IEmail } from '../../models/message';
 export class LetterPreviewComponent {
   @Input()
   message: ISearchResult<IEmail>;
+  @Input()
+  expanded: boolean;
+
+  /**
+   * onHeaderClick
+   */
+  public onHeaderClick() {
+    this.expanded = !this.expanded;
+  }
 }

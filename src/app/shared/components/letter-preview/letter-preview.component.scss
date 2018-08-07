@@ -2,17 +2,46 @@
 .email-content-header, .email-content-body, .email-content-footer {
   padding: 1em 2em;
 }
+
+.email-content-body {
+  display: none;
+}
+
+.email-content-expanded {
+  .email-content-body {
+    display: block;
+  }
+
   .email-content-header {
+    border-bottom: none;
+  }
+  
+  .email-content-title {
+    font-size: 2em;
+  }
+
+  .email-content-subtitle {
+    display: block;
+  }
+}
+
+  .email-content-header {
+      border-top: 1px solid #ddd;
       border-bottom: 1px solid #ddd;
   }
 
       .email-content-title {
+          font-size: 1em;
           margin: 0;
+      }
+      .email-content-preview {
+        margin: 0;
       }
       .email-content-subtitle {
           font-size: 1em;
           margin: 0;
           font-weight: normal;
+          display: none;
       }
           .email-content-subtitle span {
               color: #999;
@@ -25,9 +54,9 @@
           margin-bottom: 0.3em;
       }
 
-    .email-avatar-large ::ng-deep .email-avatar {
-      width: 6.25rem;
-      height: 6.25rem;
-      line-height: 6.25rem;
-      font-size: 2rem;
+  .email-content-expanded ::ng-deep .email-avatar {
+    width: 6.25rem;
+    height: 6.25rem;
+    line-height: 6.25rem;
+    font-size: 2rem;
   }

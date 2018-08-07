@@ -1,14 +1,13 @@
 import { Action } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { IEmail } from '../../../shared/models/message';
-import { ISearchResult, ISearchQuery } from '../../../shared/models/search';
+import { IThreadSearchResult, ISearchQuery } from '../../../shared/models/search';
 import { SearchActionTypes, SearchActions } from '../actions/search.actions';
 
 import cloneDeep from 'lodash/cloneDeep';
-import { stat } from 'fs';
 
-export interface State extends EntityState<ISearchResult<IEmail>> {
-  selected: ISearchResult<IEmail>;
+export interface State extends EntityState<IThreadSearchResult<IEmail>> {
+  selected: IThreadSearchResult<IEmail>;
   loading: boolean;
   total: number;
   page: number;
@@ -16,10 +15,10 @@ export interface State extends EntityState<ISearchResult<IEmail>> {
   searchQuery: ISearchQuery;
 }
 
-export const adapter: EntityAdapter<ISearchResult<IEmail>> = createEntityAdapter<
-  ISearchResult<IEmail>
+export const adapter: EntityAdapter<IThreadSearchResult<IEmail>> = createEntityAdapter<
+  IThreadSearchResult<IEmail>
 >({
-  selectId: (item: ISearchResult<IEmail>) => item.originalItem.id
+  selectId: (item: IThreadSearchResult<IEmail>) => item.id
 });
 
 export const initialState: State = adapter.getInitialState({
@@ -91,10 +90,10 @@ export function reducer(state = initialState, action: SearchActions): State {
           to: newTo
         }
       };
-      
+
     case SearchActionTypes.ChangeSearchTextQuery:
       const { query } = action.payload;
-      
+
       return {
         ...state,
         loading: true,
@@ -106,7 +105,7 @@ export function reducer(state = initialState, action: SearchActions): State {
 
     case SearchActionTypes.ChangeSearchDatesParams:
       const { date_from, date_to } = action.payload;
-      
+
       return {
         ...state,
         loading: true,
@@ -116,7 +115,6 @@ export function reducer(state = initialState, action: SearchActions): State {
           date_to
         }
       };
-
 
     default:
       return state;

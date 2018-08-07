@@ -1,6 +1,5 @@
 import { Action } from '@ngrx/store';
 import { IEmail } from '../../../shared/models/message';
-import { IListResult } from '../../../shared/models/listresult';
 import { ISearchQuery, ISearchResponse, IParticipant } from '../../../shared/models/search';
 
 export enum SearchActionTypes {

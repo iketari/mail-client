@@ -1,4 +1,5 @@
 import { IListResult } from './listresult';
+import { IThread } from './message';
 
 export interface ISearchQuery {
   date_from: Date;
@@ -14,12 +15,20 @@ export interface ISearchResult<T> {
     [field: string]: boolean;
   };
   highlights: {
+    body: THighlightRange[];
+    subject: THighlightRange[];
+  };
+}
+
+export interface IThreadSearchResult<T> extends IThread<T> {
+  performedMessages: ISearchResult<T>[];
+  highlights: {
     [field: string]: THighlightRange[];
   };
 }
 
-export interface ISearchResponse<T> extends IListResult<ISearchResult<T>> {
-  items: ISearchResult<T>[];
+export interface ISearchResponse<T> {
+  items: IThreadSearchResult<T>[];
   page: number;
   limit: number;
   total: number;
