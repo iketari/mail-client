@@ -44,7 +44,7 @@ export class EmailService {
     page: number = 1,
     limit: number = 10
   ): Observable<ISearchResponse<IEmail>> {
-    const source: ISearchResult<IEmail>[] = this.getEmails().pipe(
+    const source: Observable<ISearchResult<IEmail>[]> = this.getEmails().pipe(
       map(this.convertToResults<IEmail>()),
       map(this.filterByFrom<IEmail>(params)),
       map(this.filterByTo<IEmail>(params)),

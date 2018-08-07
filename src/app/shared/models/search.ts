@@ -19,7 +19,7 @@ export interface ISearchResult<T> {
 }
 
 export interface ISearchResponse<T> extends IListResult<ISearchResult<T>> {
-  items: ISearchResult<T>;
+  items: ISearchResult<T>[];
   page: number;
   limit: number;
   total: number;
