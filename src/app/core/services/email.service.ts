@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, filter, find } from 'rxjs/operators';
-import { IEmail } from '../../shared/models/message';
+import { IEmail, IThread } from '../../shared/models/message';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { IListResult } from '../../shared/models/listresult';
@@ -54,6 +54,24 @@ export class EmailService {
 
     return this.getPaginatedSearchResults(source, params, page, limit);
   }
+  
+  
+  /**
+   * Get search results
+   */
+  public searchThreads(
+    params: ISearchQuery,
+    page: number = 1,
+    limit: number = 10
+  ): Observable<IThread[]> {
+    const source = this.getEmails().pipe(
+      map(this.groupToThreads<IEmail>()),
+      // map(this.filterByFrom<IEmail>(params)),
+    );
+
+    return this.getPaginatedSearchResults(source, params, page, limit);
+  }
+
 
   private getPaginatedSearchResults(
     source: Observable<ISearchResult<IEmail>[]>,
@@ -78,8 +96,8 @@ export class EmailService {
     );
   }
 
-  private extractParticipants(emails: IEmail[]): IParticipant[] {
-    const temp: { [key: string]: IParticipant } = {};
+  private extractParticipants(threads: IThread[]): IParticipant[] {
+    const temp: Map<string, IParticipant> = new Map;
 
     function getParticipant(address: string): IParticipant {
       const id = md5(address);
@@ -90,15 +108,15 @@ export class EmailService {
         toEntities: {}
       };
     }
-
-    emails.forEach((email) => {
+    
+    function performEmail(email: IEmail) {
       // create all participants
       let fromParticipant = getParticipant(email.from);
       const fromParticipantId = fromParticipant.id;
-      if (!temp[fromParticipantId]) {
-        temp[fromParticipantId] = fromParticipant;
+      if (!temp.has(fromParticipantId)) {
+        temp.set(fromParticipantId, fromParticipant);
       }
-      fromParticipant = temp[fromParticipantId];
+      fromParticipant = temp.get(fromParticipantId);
 
       email.to.map((toEmail) => {
         const toParticipant = getParticipant(toEmail);
@@ -109,9 +127,39 @@ export class EmailService {
           fromParticipant.to.push(toParticipant);
         }
       });
+    };
+  
+    threads.forEach((thread) => {
+      thread.emails.forEach(performEmail);
     });
 
-    return Object.keys(temp).map((id) => temp[id]);
+    return Array.from(temp.values());
+  }
+
+  private groupToThreads<T extends IEmail>(): (value: T[]) => IThread[] {
+    return (messages: T[]) => {
+      const threadsMap: Map<string, IThread> = new Map();
+
+      messages.forEach<IThread>((message: IEmail) => {
+        const threadSubject = message.subject.replace(/(RE|FW):\s/, '');
+        const threadParticipants = [message.from, ...message.to];
+        const threadId = md5(threadSubject + threadParticipants);
+        
+        if (!threadsMap.has(threadId)) {
+          threadsMap.set(threadId, {
+            id: threadId,
+            messages: [message],
+            subject: threadSubject,
+            participants: threadParticipants
+          });
+        } else {
+          threadsMap.get(threadId).messages.push(message);
+        }
+        
+      };
+      
+      return Array.from(threadsMap.values());
+    };
   }
 
   private convertToResults<T extends IEmail>(): (value: T[]) => ISearchResult<T>[] {

@@ -52,7 +52,7 @@ export class CoreEffects {
       const { page } = action.payload;
       const params = state.core.search.searchQuery;
 
-      return this.emailService.search(params, page, state.core.search.limit);
+      return this.emailService.searchThreads(params, page, state.core.search.limit);
     }),
     switchMap((results: ISearchResponse<IEmail>) => {
       return from([
