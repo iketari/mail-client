@@ -1,2 +1,2 @@
 <span class="email-avatar"
-  [ngStyle]="{'background-color': stringToColour(name)}">{{getInitials()}}</span>
+  [ngStyle]="{'color': stringToColour(name)[1][0], 'background-color': stringToColour(name)[0][0]}">{{getInitials()}}</span>

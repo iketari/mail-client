@@ -14,7 +14,7 @@
 			<div class="list-scrollable">
 					<letter-list-item 
 							(select)="onItemSelect($event)"
-							[selected]="selectedEmail?.id === result.id"
+							[selected]="selectedThread?.id === result.id"
 							[thread]="result"
 							*ngFor="let result of results | paginate: { id: 'emails', itemsPerPage: 10, currentPage: eamilsPage, totalItems: emailsTotal }"></letter-list-item>
 			</div>
@@ -25,6 +25,6 @@
 	</div>
 
 	<div id="main" class="pure-u-1">
-		<letter-preview *ngIf="selectedEmail" [message]="selectedEmail"></letter-preview>
+		<thread-preview [thread]="selectedThread"></thread-preview>
 	</div>
 </div>

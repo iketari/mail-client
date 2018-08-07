@@ -24,12 +24,13 @@
     }
 
     .email-counter {
-        padding: 0.5em 0.8em;
+        padding: 0.2em 0.48em;
         background: #ccc;
         border-radius: 0.5em;
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
+        right: 0.7em;
     }
 
 .email-item-selected {

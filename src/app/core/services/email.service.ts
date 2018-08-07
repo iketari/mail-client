@@ -39,25 +39,6 @@ export class EmailService {
     );
   }
 
-  // /**
-  //  * Get search results
-  //  */
-  // public search(
-  //   params: ISearchQuery,
-  //   page: number = 1,
-  //   limit: number = 10
-  // ): Observable<ISearchResponse<IEmail>> {
-  //   const source: Observable<ISearchResult<IEmail>[]> = this.getEmails().pipe(
-  //     map(this.convertToResults<IEmail>()),
-  //     map(this.filterByFrom<IEmail>(params)),
-  //     map(this.filterByTo<IEmail>(params)),
-  //     map(this.filterByDate<IEmail>(params)),
-  //     map(this.filterByQuery<IEmail>(params))
-  //   );
-
-  //   return this.getPaginatedSearchResults(source, params, page, limit);
-  // }
-
   /**
    * Get search results
    */
@@ -68,8 +49,11 @@ export class EmailService {
   ): Observable<ISearchResponse<IEmail>> {
     const source = this.getEmails().pipe(
       map(this.groupToThreads()),
-      map(this.convertToResults<IEmail>())
-      // map(this.filterByFrom<IEmail>(params)),
+      map(this.convertToResults<IEmail>()),
+      map(this.filterByFrom<IEmail>(params)),
+      map(this.filterByTo<IEmail>(params)),
+      map(this.filterByDate<IEmail>(params)),
+      map(this.filterByQuery<IEmail>(params))
     );
 
     return this.getPaginatedSearchResults(source, params, page, limit);
@@ -170,7 +154,10 @@ export class EmailService {
             performedMessages: originalThread.messages.map<ISearchResult<T>>((originalItem: T) => ({
               originalItem,
               filteredBy: {},
-              highlights: {}
+              highlights: {
+                body: [],
+                subject: []
+              }
             })),
             highlights: {}
           } as IThreadSearchResult<T>)
@@ -180,89 +167,116 @@ export class EmailService {
 
   private filterByDate<T extends IEmail>(
     params: Partial<ISearchQuery>
-  ): (value: ISearchResult<T>[]) => ISearchResult<T>[] {
+  ): (value: IThreadSearchResult<T>[]) => IThreadSearchResult<T>[] {
     const date_to = params.date_to || MAX_DATE;
     const date_from = params.date_from || MIN_DATE;
 
-    return (itemsToFilter = []) => {
+    return (threadsToFilter = []) => {
       if (!params.date_from && !params.date_to) {
-        return itemsToFilter;
+        return threadsToFilter;
       }
 
-      return itemsToFilter.filter((item) => {
-        const { date } = item.originalItem;
-        if (date >= date_from && date <= date_to) {
-          item.filteredBy['date'] = true;
-          return true;
-        }
+      return threadsToFilter.filter((thread) => {
+        let result = false;
+        thread.performedMessages.forEach((message) => {
+          const { date } = message.originalItem;
+          if (date >= date_from && date <= date_to) {
+            message.filteredBy['date'] = true;
+            result = true;
+          }
+        });
+
+        return result;
       });
     };
   }
 
   private filterByTo<T extends IEmail>(
     params: Partial<ISearchQuery>
-  ): (value: ISearchResult<T>[]) => ISearchResult<T>[] {
-    return (itemsToFilter = []) => {
+  ): (value: IThreadSearchResult<T>[]) => IThreadSearchResult<T>[] {
+    return (threadsToFilter = []) => {
       if (!params.to || params.to.length === 0) {
-        return itemsToFilter;
+        return threadsToFilter;
       }
 
-      return itemsToFilter.filter((item) => {
-        if (item.originalItem.to.find((value) => -1 !== params.to.indexOf(value))) {
-          item.filteredBy['to'] = true;
-          return true;
-        }
+      return threadsToFilter.filter((thread) => {
+        let result = false;
+        thread.performedMessages.forEach((message) => {
+          if (message.originalItem.to.find((value) => -1 !== params.to.indexOf(value))) {
+            message.filteredBy['to'] = true;
+            result = true;
+          }
+        });
+
+        return result;
       });
     };
   }
 
   private filterByFrom<T extends IEmail>(
     params: Partial<ISearchQuery>
-  ): (value: ISearchResult<T>[]) => ISearchResult<T>[] {
-    return (itemsToFilter = []) => {
+  ): (value: IThreadSearchResult<T>[]) => IThreadSearchResult<T>[] {
+    return (threadsToFilter = []) => {
       if (!params.from) {
-        return itemsToFilter;
+        return threadsToFilter;
       }
 
-      return itemsToFilter.filter((item) => {
-        if (item.originalItem.from === params.from) {
-          item.filteredBy['from'] = true;
-          return true;
-        }
+      return threadsToFilter.filter((thread: IThreadSearchResult<T>) => {
+        let result = false;
+        thread.performedMessages.forEach((message) => {
+          if (message.originalItem.from === params.from) {
+            message.filteredBy['from'] = true;
+            result = true;
+          }
+        });
+
+        return result;
       });
     };
   }
 
   private filterByQuery<T extends IEmail>(
     params: Partial<ISearchQuery>
-  ): (value: ISearchResult<T>[]) => ISearchResult<T>[] {
-    return (itemsToFilter = []) => {
+  ): (value: IThreadSearchResult<T>[]) => IThreadSearchResult<T>[] {
+    return (threadsToFilter = []) => {
       if (!params.query) {
-        return itemsToFilter;
+        return threadsToFilter;
       }
 
-      return itemsToFilter.filter((item) => {
-        const subjRes = this.performQueryString<IEmail>(params.query, 'subject', item);
-        const bodyRes = this.performQueryString<IEmail>(params.query, 'body', item);
+      return threadsToFilter.filter((thread) => {
+        const subjRes = this.performQueryString<T>(params.query, 'subject', thread);
+        const bodyRes = this.performQueryString<T>(params.query, 'body', thread);
 
         return subjRes || bodyRes;
       });
     };
   }
 
-  private performQueryString<T>(query: string, field: string, item: ISearchResult<T>): boolean {
+  private performQueryString<T>(
+    query: string,
+    field: string,
+    thread: IThreadSearchResult<T>
+  ): boolean {
     const searchStr = query.toLocaleLowerCase();
-    let index = 0;
-    let startIndex = 0;
-    let str: string = item.originalItem[field];
+    let result = false;
 
-    while ((index = str.toLocaleLowerCase().indexOf(searchStr, startIndex)) > -1) {
-      startIndex = index + searchStr.length;
-      item.highlights[field] = item.highlights[field] || [];
-      item.highlights[field].push([index, startIndex]);
-    }
+    thread.performedMessages.forEach((message) => {
+      let index = 0;
+      let startIndex = 0;
+      let str: string = message.originalItem[field];
 
-    return item.highlights[field] != null;
+      while ((index = str.toLocaleLowerCase().indexOf(searchStr, startIndex)) > -1) {
+        startIndex = index + searchStr.length;
+        message.highlights[field] = message.highlights[field] || [];
+        message.highlights[field].push([index, startIndex]);
+      }
+
+      if (message.highlights[field].length !== 0) {
+        result = true;
+      }
+    });
+
+    return result;
   }
 
   private _getBaseUrl() {

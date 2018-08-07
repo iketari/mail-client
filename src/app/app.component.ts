@@ -20,7 +20,7 @@ import { LoadParticipants } from './core/ngrx/actions/context.actions';
 })
 export class AppComponent implements OnInit {
   public results: IThreadSearchResult<IEmail>[];
-  public selectedEmail: IThreadSearchResult<IEmail>;
+  public selectedThread: IThreadSearchResult<IEmail>;
   public emailsTotal: number;
   public eamilsLimit: number;
   public eamilsLoading: boolean;
@@ -51,7 +51,7 @@ export class AppComponent implements OnInit {
 
     this.store
       .pipe(select(fromCore.getSelectedResult))
-      .subscribe((selected) => (this.selectedEmail = selected));
+      .subscribe((selected) => (this.selectedThread = selected));
 
     this.store.dispatch(
       new LoadSearchResults({
