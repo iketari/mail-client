@@ -104,15 +104,25 @@ export function reducer(state = initialState, action: SearchActions): State {
       };
 
     case SearchActionTypes.ChangeSearchDatesParams:
+      let newDateFrom = state.searchQuery.date_from;
+      let newDateTo = state.searchQuery.date_to;
       const { date_from, date_to } = action.payload;
+
+      if (date_from !== undefined) {
+        newDateFrom = date_from !== null ? date_from : null;
+      }
+
+      if (date_to !== undefined) {
+        newDateTo = date_to !== null ? date_to : null;
+      }
 
       return {
         ...state,
         loading: true,
         searchQuery: {
           ...state.searchQuery,
-          date_from,
-          date_to
+          date_from: newDateFrom,
+          date_to: newDateTo
         }
       };
 
