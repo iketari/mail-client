@@ -6,8 +6,87 @@
   <base href="/mail-client/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+   <!-- inline spinner styles to be able to display spinner right away -->
+    <style type="text/css">
+      body.preloader {
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        min-height: 100vh;
+        background-color: #101a15;
+      }
+      
+      @-webkit-keyframes rotate {
+        100% {
+          -webkit-transform: rotate3d(0, 0, 1, 360deg);
+                  transform: rotate3d(0, 0, 1, 360deg);
+        }
+      }
+      
+      @keyframes rotate {
+        100% {
+          -webkit-transform: rotate3d(0, 0, 1, 360deg);
+                  transform: rotate3d(0, 0, 1, 360deg);
+        }
+      }
+      .preloader svg {
+        -webkit-transform: rotate3d(0, 0, 1, -90deg);
+                transform: rotate3d(0, 0, 1, -90deg);
+      }
+      .preloader svg circle {
+        fill: none;
+        stroke: #444;
+        stroke-width: 1px;
+        will-change: transform;
+        -webkit-transform-origin: center center;
+                transform-origin: center center;
+        -webkit-animation-name: rotate;
+                animation-name: rotate;
+        -webkit-animation-timing-function: linear;
+                animation-timing-function: linear;
+        -webkit-animation-iteration-count: infinite;
+                animation-iteration-count: infinite;
+      }
+      .preloader svg .inner {
+        stroke: #aacbb0;
+        stroke-dasharray: 200.96;
+        stroke-dashoffset: 160.96;
+        -webkit-animation-delay: 200ms;
+                animation-delay: 200ms;
+        -webkit-animation-duration: 1s;
+                animation-duration: 1s;
+      }
+      .preloader svg .middle {
+        stroke: #517574;
+        stroke-dasharray: 238.64;
+        stroke-dashoffset: 178.64;
+        -webkit-animation-delay: 100ms;
+                animation-delay: 100ms;
+        -webkit-animation-duration: 1.5s;
+                animation-duration: 1.5s;
+      }
+      .preloader svg .outer {
+        stroke: #1ca197;
+        stroke-dasharray: 276.32;
+        stroke-dashoffset: 176.32;
+        -webkit-animation-delay: 300ms;
+                animation-delay: 300ms;
+        -webkit-animation-duration: 2s;
+                animation-duration: 2s;
+      }
+
+    </style>
 <link rel="stylesheet" href="/mail-client/styles.4415a4bbc02578a8fb6e.css"></head>
-<body>
-  <app-root></app-root>
-<script type="text/javascript" src="/mail-client/runtime.68f35aa9d030437e3d03.js"></script><script type="text/javascript" src="/mail-client/polyfills.2f4a59095805af02bd79.js"></script><script type="text/javascript" src="/mail-client/main.60fafe3167ddbba92234.js"></script></body>
+<body class="preloader">
+  <app-root>
+    <!-- loading layout replaced by app after startupp -->
+    <svg viewBox="0 0 120 120" width="120px" height="120px">
+      <circle class="inner" cx="60" cy="60" r="32"/>
+      <circle class="middle" cx="60" cy="60" r="38"/>
+      <circle class="outer" cx="60" cy="60" r="44"/>
+    </svg>
+  </app-root>
+<script type="text/javascript" src="/mail-client/runtime.68f35aa9d030437e3d03.js"></script><script type="text/javascript" src="/mail-client/polyfills.2f4a59095805af02bd79.js"></script><script type="text/javascript" src="/mail-client/main.752aa0378bbb81959a82.js"></script></body>
 </html>
