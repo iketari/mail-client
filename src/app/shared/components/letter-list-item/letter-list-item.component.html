@@ -10,7 +10,7 @@
 	</div>
 
 	<div class="pure-u">
-		<div class="email-counter">
+		<div *ngIf="thread.messages.length > 1" class="email-counter">
 			{{ thread.messages.length }}
 		</div>
 	</div>

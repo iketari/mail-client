@@ -13,12 +13,11 @@ import {
   IParticipant,
   IThreadSearchResult
 } from '../../shared/models/search';
-import { until } from 'protractor';
 
 const MAX_DATE = new Date(8640000000000000);
 const MIN_DATE = new Date(-8640000000000000);
 
-const THREAD_SUBJECT_RE = /(RE|FW):\s/;
+const THREAD_SUBJECT_RE = /(RE|FW|Re|Fw):\s/;
 
 @Injectable()
 export class EmailService {
@@ -126,8 +125,8 @@ export class EmailService {
 
       messages.forEach((message: T) => {
         const threadSubject = message.subject.replace(THREAD_SUBJECT_RE, '');
-        const threadParticipants = [message.from, ...message.to];
-        const threadId = md5(threadSubject + threadParticipants);
+        const threadParticipants = [message.from, ...message.to].sort();
+        const threadId = threadSubject + threadParticipants.join('|');
 
         if (!threadsMap.has(threadId)) {
           threadsMap.set(threadId, {
@@ -137,7 +136,11 @@ export class EmailService {
             participants: threadParticipants
           } as IThread<T>);
         } else {
-          threadsMap.get(threadId).messages.push(message);
+          const messages = threadsMap.get(threadId).messages;
+          messages.push(message);
+          messages.sort(
+            (message1, message2) => +new Date(message1.date) - +new Date(message2.date)
+          );
         }
       });
 
