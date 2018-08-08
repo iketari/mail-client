@@ -42,4 +42,3 @@ export function reducer(state = initialState, action: ContextActions | SearchAct
 }
 
 export const getLoading = (state: State) => state.loading;
-export const getSelected = (state: State) => state.selected;
