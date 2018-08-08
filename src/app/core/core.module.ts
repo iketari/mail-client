@@ -8,10 +8,9 @@ import { EffectsModule } from '@ngrx/effects';
 import { CoreEffects } from './ngrx/effects/core.effects';
 import { SharedModule } from '../shared/shared.module';
 import { EmailService } from './services/email.service';
-import { BackendService } from './services/backend.service';
 import { SidebarComponent } from './containers/sidebar/sidebar.component';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { FormsModule } from '../../../node_modules/@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [SidebarComponent],
@@ -27,6 +26,6 @@ import { FormsModule } from '../../../node_modules/@angular/forms';
 
     SharedModule
   ],
-  providers: [EmailService, BackendService]
+  providers: [EmailService]
 })
 export class CoreModule {}

@@ -1,6 +1,8 @@
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LetterPreviewComponent } from './letter-preview.component';
+import { HighlightPipe } from './../../pipes/highlight.pipe';
 
 describe('LetterPreviewComponent', () => {
   let component: LetterPreviewComponent;
@@ -8,7 +10,8 @@ describe('LetterPreviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [LetterPreviewComponent]
+      declarations: [HighlightPipe, LetterPreviewComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 

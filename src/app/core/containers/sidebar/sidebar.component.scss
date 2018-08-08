@@ -65,6 +65,13 @@
     .pure-menu-link-pseudo:hover {
       background: none;
     }
+    
+    ::ng-deep .email-avatar-tiny {
+      width: .5rem;
+      height: .5rem;
+      line-height: .5rem;
+      font-size: .5rem;
+    }
 }
 
 /*
