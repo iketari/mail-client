@@ -8,7 +8,8 @@ import * as fromCore from './core/ngrx/reducers';
 import {
   LoadSearchResults,
   SelectResult,
-  ChangeSearchTextQuery
+  ChangeSearchTextQuery,
+  ResetSearch
 } from './core/ngrx/actions/search.actions';
 import { IThreadSearchResult, IParticipant, ISearchQuery } from './shared/models/search';
 import { LoadParticipants } from './core/ngrx/actions/context.actions';
@@ -76,5 +77,10 @@ export class AppComponent implements OnInit {
 
   public onSearchChange(query: string) {
     this.store.dispatch(new ChangeSearchTextQuery({ query }));
+  }
+
+  public onLogoClick(event) {
+    event.preventDefault();
+    this.store.dispatch(new ResetSearch());
   }
 }

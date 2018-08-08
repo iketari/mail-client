@@ -1,6 +1,6 @@
 <div class="header">
 	<div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
-		<a class="pure-menu-heading" href="/">Behavox</a>
+		<a (click)="onLogoClick($event)" class="pure-menu-heading" href="/">Behavox</a>
 
 		<form class="header-right pure-form">
 			<input [ngModel]="searchQuery.query" (change)="onSearchChange(search.value)" #search type="search" placeholder="Search" name="search" class="pure-input-rounded">

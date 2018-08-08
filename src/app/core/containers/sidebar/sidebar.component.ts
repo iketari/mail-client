@@ -6,8 +6,7 @@ import { IParticipant, ISearchQuery } from '../../../shared/models/search';
 import { LoadParticipants } from '../../ngrx/actions/context.actions';
 import {
   ChangeSearchParticipantsParams,
-  ChangeSearchDatesParams,
-  ResetSearch
+  ChangeSearchDatesParams
 } from '../../ngrx/actions/search.actions';
 
 @Component({
@@ -85,12 +84,5 @@ export class SidebarComponent implements OnInit {
         date_to: value ? new Date(value) : null
       })
     );
-  }
-
-  /**
-   * handler for "reset" button click
-   */
-  public onResetClick() {
-    this.store.dispatch(new ResetSearch());
   }
 }
