@@ -5,16 +5,16 @@
 
 ### Production environment
 
-** Before you load an app, please make sure that you add a secure exception for the unsigned HTTPS cetificate for the domain (https://artsiom.mezin.eu/) **
+**Before you load an app, please make sure that you add a secure exception for the unsigned HTTPS cetificate for the domain (https://artsiom.mezin.eu/)**
 
-After thar enjoy [the app](http://artsiom.mezin.eu/mail-client/)
+After thar enjoy [the app](http://artsiom.mezin.eu/mail-client/)!
 
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.1.
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `npm start` for a dev and a mock backend servers. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 

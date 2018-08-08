@@ -14,7 +14,8 @@ import {
   LoadSearchResultsFail,
   ChangeSearchParticipantsParams,
   ChangeSearchTextQuery,
-  ChangeSearchDatesParams
+  ChangeSearchDatesParams,
+  ResetSearch
 } from '../actions/search.actions';
 import { ISearchResponse, IParticipant } from '../../../shared/models/search';
 import { IEmail } from '../../../shared/models/message';
@@ -30,10 +31,13 @@ import {
 export class CoreEffects {
   @Effect()
   public changeQuery$: Observable<Action> = this.actions$.pipe(
-    ofType<ChangeSearchParticipantsParams | ChangeSearchTextQuery | ChangeSearchDatesParams>(
+    ofType<
+      ChangeSearchParticipantsParams | ChangeSearchTextQuery | ChangeSearchDatesParams | ResetSearch
+    >(
       SearchActionTypes.ChangeSearchParticipantsParams,
       SearchActionTypes.ChangeSearchTextQuery,
-      SearchActionTypes.ChangeSearchDatesParams
+      SearchActionTypes.ChangeSearchDatesParams,
+      SearchActionTypes.ResetSearch
     ),
     withLatestFrom(this.store),
     switchMap(([action, state]) => {

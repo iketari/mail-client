@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import { IEmail } from '../../../shared/models/message';
+import { IListResult } from '../../../shared/models/listresult';
 import { ISearchQuery, ISearchResponse, IParticipant } from '../../../shared/models/search';
 
 export enum SearchActionTypes {
@@ -9,7 +10,8 @@ export enum SearchActionTypes {
   SelectSearchResult = '[Search] Select Result',
   ChangeSearchParticipantsParams = '[Search] Change Participants Params',
   ChangeSearchDatesParams = '[Search] Change Date Params',
-  ChangeSearchTextQuery = '[Search] Change Text Query'
+  ChangeSearchTextQuery = '[Search] Change Text Query',
+  ResetSearch = '[Search] Reset'
 }
 
 export class LoadSearchResults implements Action {
@@ -47,6 +49,10 @@ export class ChangeSearchTextQuery implements Action {
   constructor(public payload: { query: string }) {}
 }
 
+export class ResetSearch implements Action {
+  readonly type = SearchActionTypes.ResetSearch;
+}
+
 export type SearchActions =
   | LoadSearchResults
   | LoadSearchResultsSuccess
@@ -54,4 +60,5 @@ export type SearchActions =
   | SelectResult
   | ChangeSearchParticipantsParams
   | ChangeSearchDatesParams
-  | ChangeSearchTextQuery;
+  | ChangeSearchTextQuery
+  | ResetSearch;

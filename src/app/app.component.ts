@@ -10,7 +10,7 @@ import {
   SelectResult,
   ChangeSearchTextQuery
 } from './core/ngrx/actions/search.actions';
-import { IThreadSearchResult, IParticipant } from './shared/models/search';
+import { IThreadSearchResult, IParticipant, ISearchQuery } from './shared/models/search';
 import { LoadParticipants } from './core/ngrx/actions/context.actions';
 
 @Component({
@@ -25,6 +25,7 @@ export class AppComponent implements OnInit {
   public eamilsLimit: number;
   public eamilsLoading: boolean;
   public eamilsPage: number;
+  public searchQuery: ISearchQuery;
 
   constructor(private store: Store<fromRoot.State>) {}
 
@@ -52,6 +53,10 @@ export class AppComponent implements OnInit {
     this.store
       .pipe(select(fromCore.getSelectedResult))
       .subscribe((selected) => (this.selectedThread = selected));
+
+    this.store
+      .pipe(select(fromCore.getSearchQuery))
+      .subscribe((searchQuery) => (this.searchQuery = searchQuery));
 
     this.store.dispatch(
       new LoadSearchResults({

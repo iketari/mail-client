@@ -116,6 +116,15 @@ export function reducer(state = initialState, action: SearchActions): State {
         }
       };
 
+    case SearchActionTypes.ResetSearch:
+      return {
+        ...state,
+        loading: true,
+        searchQuery: {
+          ...initialState.searchQuery
+        }
+      };
+
     default:
       return state;
   }
@@ -126,3 +135,4 @@ export const getSelected = (state: State) => state.selected;
 export const getTotal = (state: State) => state.total;
 export const getPage = (state: State) => state.page;
 export const getLimit = (state: State) => state.limit;
+export const getSearchQuery = (state: State) => state.searchQuery;

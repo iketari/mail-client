@@ -27,10 +27,36 @@ export const getCoreState = createFeatureSelector<CoreState>('core');
 
 // context selectors
 export const getContextEntitiesState = createSelector(getCoreState, (state) => state.context);
-export const getSelectedFromParticipant = createSelector(
-  getContextEntitiesState,
-  (state) => state.selected
-);
+export const getSelectedFromParticipant = createSelector(getCoreState, (state) => {
+  const { from } = state.search.searchQuery;
+
+  for (const id of state.context.ids) {
+    if (state.context.entities[id].email === from) {
+      return state.context.entities[id];
+    }
+  }
+
+  return null;
+});
+
+export const getSelectedToParticipants = createSelector(getCoreState, (state) => {
+  const { from, to } = state.search.searchQuery;
+  let fromParticipant = null;
+
+  for (const id of state.context.ids) {
+    if (state.context.entities[id].email === from) {
+      fromParticipant = state.context.entities[id];
+    }
+  }
+
+  if (fromParticipant) {
+    return fromParticipant.to
+      .filter((toParticipant) => to.includes(toParticipant.email))
+      .map((toParticipant) => toParticipant.id);
+  }
+
+  return [];
+});
 
 export const {
   selectIds: getParticipantsIds,
@@ -60,6 +86,11 @@ export const getSearchResultsLimit = createSelector(
 export const getSearchResultsLoading = createSelector(
   getSearchResultsEntitiesState,
   fromSearch.getLoading
+);
+
+export const getSearchQuery = createSelector(
+  getSearchResultsEntitiesState,
+  fromSearch.getSearchQuery
 );
 
 export const getSelectedResult = createSelector(

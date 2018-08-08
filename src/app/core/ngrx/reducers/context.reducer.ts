@@ -7,7 +7,6 @@ import { SearchActions, SearchActionTypes } from '../actions/search.actions';
 
 export interface State extends EntityState<IParticipant> {
   loading: boolean;
-  selected: IParticipant;
 }
 
 export const adapter: EntityAdapter<IParticipant> = createEntityAdapter<IParticipant>({
@@ -15,8 +14,7 @@ export const adapter: EntityAdapter<IParticipant> = createEntityAdapter<IPartici
 });
 
 export const initialState: State = adapter.getInitialState({
-  loading: false,
-  selected: null
+  loading: false
 });
 
 export function reducer(state = initialState, action: ContextActions | SearchActions): State {
@@ -37,20 +35,6 @@ export function reducer(state = initialState, action: ContextActions | SearchAct
       return {
         ...initialState
       };
-
-    case SearchActionTypes.ChangeSearchParticipantsParams: {
-      const { from } = action.payload;
-      let selected: IParticipant = state.selected;
-
-      if (from !== undefined) {
-        selected = action.payload.from;
-      }
-
-      return {
-        ...state,
-        selected
-      };
-    }
 
     default:
       return state;
