@@ -3,6 +3,13 @@
 [![Build Status](https://travis-ci.org/iketari/mail-client.svg?branch=master)](https://travis-ci.org/iketari/mail-client)
 
 
+### Production environment
+
+** Before you load an app, please make sure that you add a secure exception for the unsigned HTTPS cetificate for the domain (https://artsiom.mezin.eu/) **
+
+After thar enjoy [the app](http://artsiom.mezin.eu/mail-client/)
+
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.1.
 
 ## Development server
