@@ -105,6 +105,14 @@
 			height: 100%;
 			border-right: 1px solid #ddd;
 
+			.no-results {
+				text-align: center;
+				background: #cecece;
+				padding: 20px;
+				border-radius: 5px;
+				margin: 10px;
+			}
+
 			.list-scrollable {
 				position: absolute;
 				overflow: auto;

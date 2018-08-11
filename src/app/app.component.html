@@ -11,6 +11,7 @@
 	<sidebar></sidebar>
 
 	<div id="list" class="pure-u-1">
+			<h3 class="no-results" *ngIf="!eamilsLoading && results.length === 0">Nothing to show. Try to change query.</h3>
 			<spinner *ngIf="eamilsLoading"></spinner>
 			<div class="list-scrollable">
 				<letter-list-item

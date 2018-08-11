@@ -58,8 +58,41 @@
       width: 100%;
     }
 
+    .email-item-option {
+      display: inline-block;
+      line-height: 25px;
+      vertical-align: middle;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      ::ng-deep .email-avatar {
+        display: block;
+        float: left;
+      }
+    }
+
+    ::ng-deep .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+      margin-right: 0;
+    }
+
     .pure-menu-item-select {
         padding: 0 1.5em;
+
+        ::ng-deep .ng-select input {
+          padding: 0;
+        }
+
+        ::ng-deep .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-placeholder {
+          top: 9px;
+          padding-bottom: 0;
+          padding-left: 10px;
+          padding-right: 25px;
+          white-space: nowrap;
+          right: 0;
+          left: 0;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
     }
 
     .pure-menu-link-pseudo:hover {
