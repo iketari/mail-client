@@ -83,4 +83,8 @@ export class AppComponent implements OnInit {
     event.preventDefault();
     this.store.dispatch(new ResetSearch());
   }
+
+  public onParticipantClick(event) {
+    console.log(event.detail);
+  }
 }

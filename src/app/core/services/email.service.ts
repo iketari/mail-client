@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, filter, find } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { IEmail, IThread } from '../../shared/models/message';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-import { IListResult } from '../../shared/models/listresult';
 import md5 from 'blueimp-md5';
+import planer from 'planer';
 import {
   ISearchQuery,
   ISearchResult,
@@ -18,6 +18,8 @@ const MAX_DATE = new Date(8640000000000000);
 const MIN_DATE = new Date(-8640000000000000);
 
 const THREAD_SUBJECT_RE = /(RE|FW|Re|Fw):\s/;
+
+const MESSAGE_QUOTATION_RE = /-{5}Original\ Message-{5}/;
 
 @Injectable()
 export class EmailService {
@@ -47,6 +49,7 @@ export class EmailService {
     limit: number = 10
   ): Observable<ISearchResponse<IEmail>> {
     const source = this.getEmails().pipe(
+      map(this.extractOriginal<IEmail>()),
       map(this.groupToThreads()),
       map(this.convertToResults<IEmail>()),
       map(this.filterByFrom<IEmail>(params)),
@@ -77,6 +80,16 @@ export class EmailService {
         participants: this.extractParticipants<IEmail>(results)
       }))
     );
+  }
+
+  private extractOriginal<T extends IEmail>(): (value: T[]) => T[] {
+    return (messages: T[]): T[] => {
+      return messages.map<T>((message: T) => {
+        message.bodyParts = message.body.split(MESSAGE_QUOTATION_RE);
+
+        return message;
+      });
+    };
   }
 
   private extractParticipants<T extends IEmail>(threads: IThread<T>[]): IParticipant[] {

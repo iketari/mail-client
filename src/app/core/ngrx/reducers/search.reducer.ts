@@ -61,11 +61,11 @@ export function reducer(state = initialState, action: SearchActions): State {
       };
 
     case SearchActionTypes.SelectSearchResult:
-      let slected = state.entities[action.payload.id];
+      let slected = action.payload.id ? state.entities[action.payload.id] : null;
 
       return {
         ...state,
-        selected: cloneDeep(slected)
+        selected: slected ? cloneDeep(slected) : null
       };
 
     case SearchActionTypes.ChangeSearchParticipantsParams:

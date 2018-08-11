@@ -15,7 +15,8 @@ import {
   ChangeSearchParticipantsParams,
   ChangeSearchTextQuery,
   ChangeSearchDatesParams,
-  ResetSearch
+  ResetSearch,
+  SelectResult
 } from '../actions/search.actions';
 import { ISearchResponse, IParticipant } from '../../../shared/models/search';
 import { IEmail } from '../../../shared/models/message';
@@ -65,6 +66,22 @@ export class CoreEffects {
       ]);
     }),
     catchError((err) => of(new LoadSearchResultsFail(err)))
+  );
+
+  @Effect()
+  public searchSuccess$: Observable<Action> = this.actions$.pipe(
+    ofType<LoadSearchResultsSuccess>(SearchActionTypes.LoadSearchResultsSuccess),
+    withLatestFrom(this.store),
+    switchMap(([action, state]) => {
+      let actions: Action[] = [];
+      const { selected, entities } = state.core.search;
+
+      if (selected && entities[selected.id]) {
+        actions.push(new SelectResult({ id: selected.id }));
+      }
+
+      return from(actions);
+    })
   );
 
   constructor(

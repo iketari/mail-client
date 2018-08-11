@@ -1,20 +1,25 @@
 <div class="email-content" [ngClass]="{'email-content-expanded': expanded}">
-    <div (click)="onHeaderClick()" class="email-content-header pure-g">
-        <div class="pure-u-1-5">
-          <letter-avatar class="email-avatar-large" [name]="message.originalItem.from"></letter-avatar>
+    <div class="email-content-header pure-g">
+        <div class="email-content-header-avatar pure-u">
+          <letter-avatar (click)="onAvatarClick()" class="email-avatar-large" [name]="message.originalItem.from"></letter-avatar>
         </div>
-        <div class="pure-u-4-5">
-          <h1 class="email-content-title" [innerHTML]="message.originalItem.subject | highlight: message.highlights.subject"></h1>
-          <h3 *ngIf="!message.originalItem.subject" class="email-content-preview">{{message.originalItem.body.slice(0, 200)}}...</h3>
+        <div (click)="onInfoClick($event)" class="email-content-header-info pure-u-1-1">
+          <h1 class="email-content-title" [innerHTML]="message.originalItem.subject || '&nbsp;' | highlight: message.highlights.subject"></h1>
           <p class="email-content-subtitle">
-              From: <a>{{message.originalItem.from}}</a>
+              From: <a [attr.data-from]="message.originalItem.from" class="link-from">{{message.originalItem.from}}</a>
+              To: <span class="email-content-to">
+                    <ng-container *ngFor="let to of message.originalItem.to; last as isLast">
+						<a [attr.data-to]="to" class="link-to">{{to}}</a>
+                    	<ng-container *ngIf="!isLast">,&nbsp;</ng-container>
+                    </ng-container>
+                </span>  
               <br>
-              To: <span><a *ngFor="let to of message.originalItem.to">{{to}}</a></span>  
-              <br>
-              at <span>{{message.originalItem.date | date:'medium'}}</span>
+              At: <span>{{message.originalItem.date | date:'medium'}}</span>
           </p>
         </div>
     </div>
 
-    <div class="email-content-body" [innerHTML]="message.originalItem.body | highlight: message.highlights.body"></div>
+    <div class="email-content-body" [innerHTML]="message.originalItem.body | highlight: message.highlights.body">
+
+    </div>
 </div>

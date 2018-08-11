@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, ElementRef } from '@angular/core';
 import { ISearchResult } from '../../models/search';
 import { IEmail } from '../../models/message';
 
@@ -14,10 +14,29 @@ export class LetterPreviewComponent {
   @Input()
   expanded: boolean;
 
+  constructor(private el: ElementRef) {}
+
   /**
-   * onHeaderClick
+   * expand the letter
    */
-  public onHeaderClick() {
+  public onAvatarClick() {
     this.expanded = !this.expanded;
+  }
+
+  /**
+   * onInfoClick
+   */
+  public onInfoClick(event: MouseEvent) {
+    const el: HTMLElement = event.target as HTMLElement;
+    const { to, from } = el.dataset;
+    if (!to && !from) {
+      return;
+    }
+
+    this.el.nativeElement.dispatchEvent(
+      new CustomEvent<{ from?: string; to?: string }>('participant-click', {
+        detail: { to, from }
+      })
+    );
   }
 }

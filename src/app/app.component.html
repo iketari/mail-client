@@ -26,6 +26,6 @@
 	</div>
 
 	<div id="main" class="pure-u-1">
-		<thread-preview [thread]="selectedThread"></thread-preview>
+		<thread-preview (participant-click)="onParticipantClick($event)" [thread]="selectedThread"></thread-preview>
 	</div>
 </div>

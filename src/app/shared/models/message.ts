@@ -5,6 +5,7 @@ export interface IEmail {
   bcc: string[];
   subject: string;
   body: string;
+  bodyParts?: string[];
   date: Date;
   id?: string;
 }
