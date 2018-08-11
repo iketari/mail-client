@@ -19,7 +19,13 @@
         </div>
     </div>
 
-    <div class="email-content-body" [innerHTML]="message.originalItem.body | highlight: message.highlights.body">
-
+    <div class="email-content-body">
+        <ng-container *ngFor="let part of message.originalItem.bodyParts; first as isFirst; last as isLast; index as i">
+            <div class="email-body-part" [innerHTML]="part | highlight: message.highlights.bodyParts && message.highlights.bodyParts[i]"></div>
+            <input *ngIf="!isLast" type="checkbox" [id]="message.originalItem.id + 'toggle' + i" checked hidden>
+            <label *ngIf="!isLast" [for]="message.originalItem.id + 'toggle' + i" class="email-body-part-splitter">
+                <div class="ellipsis"></div>
+            </label>
+        </ng-container>
     </div>
 </div>

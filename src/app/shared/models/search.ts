@@ -15,7 +15,9 @@ export interface ISearchResult<T> {
     [field: string]: boolean;
   };
   highlights: {
-    body: THighlightRange[];
+    bodyParts: {
+      [key: number]: THighlightRange[];
+    };
     subject: THighlightRange[];
   };
 }

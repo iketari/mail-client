@@ -7,6 +7,50 @@
   display: none;
 }
 
+  .email-body-part {
+    white-space: pre-wrap
+  }
+
+  .email-body-part-splitter + .email-body-part {
+    margin-top: 0.5em;
+    padding-left: 0.5em;
+  }
+
+    .email-body-part-splitter {
+      cursor: pointer;
+      display: inline-block;
+      background-color: #e8eaed;
+      border: none;
+      border-radius: 5.5px;
+      width: 24px;
+      margin-top: 0.5em;
+
+    .email-body-part-splitter:hover {
+      background-color: #dadce0;
+    }
+
+      .ellipsis {
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 20px;
+        background-image: url('./../../../../assets/more_horiz_black_20dp.png');
+        height: 11px;
+        width: 24px;
+        opacity: .54;
+      }
+    }
+
+    input[type=checkbox]:checked ~ .email-body-part-splitter ~ .email-body-part,
+    input[type=checkbox]:checked ~ .email-body-part-splitter:not(:first-of-type) { 
+      display: none;
+    }
+
+    input[type=checkbox]:not(:checked) ~ .email-body-part-splitter.email-body-part-splitter { 
+      display: block;
+    }
+
+
+
 .email-content-expanded {
   .email-content-body {
     display: block;
@@ -83,7 +127,6 @@
         }
 
         .link-to {
-          white-space: nowrap;
           cursor: pointer;
         }
 

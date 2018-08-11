@@ -39,4 +39,13 @@ export class LetterPreviewComponent {
       })
     );
   }
+
+  /**
+   * onBodyClick
+   */
+  public onBodyClick(event: MouseEvent) {
+    const el: HTMLElement = event.target as HTMLElement;
+
+    (<HTMLElement>el.parentElement.nextElementSibling).style.display = 'block';
+  }
 }

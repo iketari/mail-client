@@ -50,7 +50,7 @@ export class EmailService {
   ): Observable<ISearchResponse<IEmail>> {
     const source = this.getEmails().pipe(
       map(this.extractOriginal<IEmail>()),
-      map(this.groupToThreads()),
+      map(this.groupToThreads<IEmail>()),
       map(this.convertToResults<IEmail>()),
       map(this.filterByFrom<IEmail>(params)),
       map(this.filterByTo<IEmail>(params)),
@@ -172,6 +172,7 @@ export class EmailService {
               filteredBy: {},
               highlights: {
                 body: [],
+                bodyParts: {},
                 subject: []
               }
             })),
@@ -261,7 +262,7 @@ export class EmailService {
 
       return threadsToFilter.filter((thread) => {
         const subjRes = this.performQueryString<T>(params.query, 'subject', thread);
-        const bodyRes = this.performQueryString<T>(params.query, 'body', thread);
+        const bodyRes = this.performQueryString<T>(params.query, 'bodyParts', thread);
 
         return subjRes || bodyRes;
       });
@@ -276,19 +277,32 @@ export class EmailService {
     const searchStr = query.toLocaleLowerCase();
     let result = false;
 
-    thread.performedMessages.forEach((message) => {
+    const doString = (str: string, searchStr: string, highlights: [number, number][]) => {
       let index = 0;
       let startIndex = 0;
-      let str: string = message.originalItem[field];
 
       while ((index = str.toLocaleLowerCase().indexOf(searchStr, startIndex)) > -1) {
         startIndex = index + searchStr.length;
-        message.highlights[field] = message.highlights[field] || [];
-        message.highlights[field].push([index, startIndex]);
+        highlights.push([index, startIndex]);
       }
 
-      if (message.highlights[field].length !== 0) {
-        result = true;
+      return highlights.length !== 0;
+    };
+
+    thread.performedMessages.forEach((message) => {
+      let data = message.originalItem[field];
+
+      if (Array.isArray(data)) {
+        data.forEach((str: string, index: number) => {
+          message.highlights[field][index] = message.highlights[field][index] || [];
+          const localRes = doString(str, searchStr, message.highlights[field][index]);
+
+          if (localRes) {
+            result = true;
+          }
+        });
+      } else {
+        result = doString(data, searchStr, message.highlights[field]);
       }
     });
 
