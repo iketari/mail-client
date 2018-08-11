@@ -6,6 +6,7 @@ node_js:
 before_script:
   - npm install
 script:
+  - npm test
   - npm run build:prod
 deploy:
   provider: pages
