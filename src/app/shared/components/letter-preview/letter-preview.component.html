@@ -14,7 +14,7 @@
                     </ng-container>
                 </span>  
               <br>
-              At: <span>{{message.originalItem.date | date:'medium'}}</span>
+              At: <a [attr.data-date]="message.originalItem.date" class="link-date">{{message.originalItem.date | date:'medium'}}</a>
           </p>
         </div>
     </div>

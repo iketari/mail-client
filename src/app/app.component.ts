@@ -9,7 +9,9 @@ import {
   LoadSearchResults,
   SelectResult,
   ChangeSearchTextQuery,
-  ResetSearch
+  ResetSearch,
+  ChangeSearchParticipantsParams,
+  ChangeSearchDatesParams
 } from './core/ngrx/actions/search.actions';
 import { IThreadSearchResult, IParticipant, ISearchQuery } from './shared/models/search';
 import { LoadParticipants } from './core/ngrx/actions/context.actions';
@@ -84,7 +86,25 @@ export class AppComponent implements OnInit {
     this.store.dispatch(new ResetSearch());
   }
 
-  public onParticipantClick(event) {
-    console.log(event.detail);
+  public onFilterChange(event) {
+    const { from, to, date } = event.detail;
+
+    if (date) {
+      this.store.dispatch(
+        new ChangeSearchDatesParams({
+          date_from: new Date(date),
+          date_to: new Date(date)
+        })
+      );
+    }
+
+    if (from || to) {
+      this.store.dispatch(
+        new ChangeSearchParticipantsParams({
+          to: to ? [<IParticipant>{ email: to }] : undefined,
+          from: from ? <IParticipant>{ email: from } : undefined
+        })
+      );
+    }
   }
 }

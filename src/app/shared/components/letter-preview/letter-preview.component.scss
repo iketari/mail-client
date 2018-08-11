@@ -122,15 +122,19 @@
           word-break: break-all;
         }
 
-        span {
+        .link-date {
           color: #999;
         }
 
-        .link-to {
+        .link-to,
+        .link-from,
+        .link-date {
           cursor: pointer;
         }
 
-        .link-to:hover {
+        .link-to:hover,
+        .link-from:hover,
+        .link-date:hover {
           text-decoration: underline;
         }
       }

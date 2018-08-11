@@ -28,24 +28,16 @@ export class LetterPreviewComponent {
    */
   public onInfoClick(event: MouseEvent) {
     const el: HTMLElement = event.target as HTMLElement;
-    const { to, from } = el.dataset;
-    if (!to && !from) {
+    const { to, from, date } = el.dataset;
+    if (!to && !from && !date) {
       return;
     }
 
     this.el.nativeElement.dispatchEvent(
-      new CustomEvent<{ from?: string; to?: string }>('participant-click', {
-        detail: { to, from }
+      new CustomEvent<{ from?: string; to?: string; date?: string }>('filter-change', {
+        bubbles: true,
+        detail: { to, from, date }
       })
     );
-  }
-
-  /**
-   * onBodyClick
-   */
-  public onBodyClick(event: MouseEvent) {
-    const el: HTMLElement = event.target as HTMLElement;
-
-    (<HTMLElement>el.parentElement.nextElementSibling).style.display = 'block';
   }
 }

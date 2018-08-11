@@ -12,6 +12,8 @@ import { SidebarComponent } from './containers/sidebar/sidebar.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+
 @NgModule({
   declarations: [SidebarComponent],
   exports: [SidebarComponent],
@@ -23,6 +25,9 @@ import { FormsModule } from '@angular/forms';
 
     FormsModule,
     NgSelectModule,
+
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
 
     SharedModule
   ],

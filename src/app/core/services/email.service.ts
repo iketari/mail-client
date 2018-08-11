@@ -5,7 +5,7 @@ import { IEmail, IThread } from '../../shared/models/message';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import md5 from 'blueimp-md5';
-import planer from 'planer';
+
 import {
   ISearchQuery,
   ISearchResult,
@@ -19,7 +19,7 @@ const MIN_DATE = new Date(-8640000000000000);
 
 const THREAD_SUBJECT_RE = /(RE|FW|Re|Fw):\s/;
 
-const MESSAGE_QUOTATION_RE = /-{5}Original\ Message-{5}/;
+const MESSAGE_QUOTATION_RE = /-{5}(?:\s)?Original\ Message(?:\s)?-{5}/;
 
 @Injectable()
 export class EmailService {

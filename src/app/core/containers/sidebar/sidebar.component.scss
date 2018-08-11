@@ -78,6 +78,10 @@
     .pure-menu-item-select {
         padding: 0 1.5em;
 
+        input {
+          width: 100%;
+        }
+
         ::ng-deep .ng-select input {
           padding: 0;
         }

@@ -13,11 +13,13 @@ import { SharedModule } from './shared/shared.module';
 import { NgxPaginationModule } from 'ngx-pagination';
 
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot([]),
     HttpClientModule,

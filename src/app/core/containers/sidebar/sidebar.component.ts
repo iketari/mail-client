@@ -65,23 +65,13 @@ export class SidebarComponent implements OnInit {
   }
 
   /**
-   * handler for "from date" input change
+   * onDateChange
    */
-  public onDateFromChange(value: string) {
+  public onDateChange([date_from, date_to]: [Date, Date]) {
     this.store.dispatch(
       new ChangeSearchDatesParams({
-        date_from: value ? new Date(value) : null
-      })
-    );
-  }
-
-  /**
-   * handler for "to date" input change
-   */
-  public onDateToChange(value: string) {
-    this.store.dispatch(
-      new ChangeSearchDatesParams({
-        date_to: value ? new Date(value) : null
+        date_from,
+        date_to
       })
     );
   }
