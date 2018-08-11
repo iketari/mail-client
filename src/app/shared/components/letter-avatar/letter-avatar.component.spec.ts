@@ -1,24 +1,40 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { LetterAvatarComponent } from './letter-avatar.component';
 
+const pretty = require('pretty');
+
 describe('LetterAvatarComponent', () => {
-  let component: LetterAvatarComponent;
+  let comp: LetterAvatarComponent;
   let fixture: ComponentFixture<LetterAvatarComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [LetterAvatarComponent]
-    }).compileComponents();
-  }));
-
   beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [LetterAvatarComponent],
+      schemas: [NO_ERRORS_SCHEMA]
+    });
+
     fixture = TestBed.createComponent(LetterAvatarComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    comp = fixture.componentInstance;
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('can load instance', () => {
+    expect(comp).toBeTruthy();
+  });
+
+  it('should match snapshop', () => {
+    comp.name = 'iketari@gmail.com';
+
+    fixture.changeDetectorRef.markForCheck();
+    fixture.detectChanges();
+    expect(pretty(fixture.nativeElement.outerHTML)).toMatchSnapshot();
+  });
+
+  it('should match snapshop', () => {
+    comp.name = 'Artsiom Mezin';
+
+    fixture.changeDetectorRef.markForCheck();
+    fixture.detectChanges();
+    expect(pretty(fixture.nativeElement.outerHTML)).toMatchSnapshot();
   });
 });

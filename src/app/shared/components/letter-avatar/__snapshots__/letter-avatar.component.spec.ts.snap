@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LetterAvatarComponent should match snapshop 1`] = `"<div id=\\"root1\\" ng-version=\\"6.1.0\\"><span class=\\"email-avatar\\" style=\\"color: rgb(246, 241, 237); background-color: rgb(176, 161, 142);\\" ng-reflect-ng-style=\\"[object Object]\\">ik</span></div>"`;
+
+exports[`LetterAvatarComponent should match snapshop 2`] = `"<div id=\\"root2\\" ng-version=\\"6.1.0\\"><span class=\\"email-avatar\\" style=\\"color: rgb(246, 241, 237); background-color: rgb(181, 181, 183);\\" ng-reflect-ng-style=\\"[object Object]\\">AM</span></div>"`;
