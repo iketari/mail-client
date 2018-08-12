@@ -1,9 +1,4 @@
-import {
-  createSelector,
-  createFeatureSelector,
-  ActionReducer,
-  ActionReducerMap
-} from '@ngrx/store';
+import { createSelector, createFeatureSelector, ActionReducerMap } from '@ngrx/store';
 
 import * as fromContext from './context.reducer';
 import * as fromSearch from './search.reducer';

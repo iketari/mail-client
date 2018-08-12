@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[Core] Search Reducer ChangeSearchTextQuery should chnage search line in the query 1`] = `
+Object {
+  "entities": Object {
+    "id1": Object {
+      "id": "id1",
+      "subject": "Hello world!",
+    },
+  },
+  "ids": Array [
+    "id1",
+  ],
+  "limit": 10,
+  "loading": true,
+  "page": 1,
+  "searchQuery": Object {
+    "date_from": null,
+    "date_to": null,
+    "from": null,
+    "query": "Hello world",
+    "to": Array [],
+  },
+  "selected": null,
+  "total": 1,
+}
+`;
+
+exports[`[Core] Search Reducer LoadSearchResults should change state to loading 1`] = `
+Object {
+  "entities": Object {},
+  "ids": Array [],
+  "limit": 10,
+  "loading": true,
+  "page": 0,
+  "searchQuery": Object {
+    "date_from": null,
+    "date_to": null,
+    "from": null,
+    "query": null,
+    "to": Array [],
+  },
+  "selected": null,
+  "total": 0,
+}
+`;

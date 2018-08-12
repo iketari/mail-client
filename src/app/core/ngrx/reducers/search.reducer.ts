@@ -1,4 +1,3 @@
-import { Action } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { IEmail } from '../../../shared/models/message';
 import { IThreadSearchResult, ISearchQuery } from '../../../shared/models/search';
